@@ -1,0 +1,3268 @@
+[
+ {
+  "offset": 0,
+  "hex": "0x00",
+  "name": "Program name char 0",
+  "sources": [
+   "SysEx layout"
+  ],
+  "observed_min": 34,
+  "observed_max": 89,
+  "observed_common": 83
+ },
+ {
+  "offset": 1,
+  "hex": "0x01",
+  "name": "Program name char 1",
+  "sources": [
+   "SysEx layout"
+  ],
+  "observed_min": 32,
+  "observed_max": 121,
+  "observed_common": 111
+ },
+ {
+  "offset": 2,
+  "hex": "0x02",
+  "name": "Program name char 2",
+  "sources": [
+   "SysEx layout"
+  ],
+  "observed_min": 32,
+  "observed_max": 122,
+  "observed_common": 110
+ },
+ {
+  "offset": 3,
+  "hex": "0x03",
+  "name": "Program name char 3",
+  "sources": [
+   "SysEx layout",
+   "NRPN 1 (0x01) sub 24"
+  ],
+  "observed_min": 32,
+  "observed_max": 121,
+  "observed_common": 32
+ },
+ {
+  "offset": 4,
+  "hex": "0x04",
+  "name": "Program name char 4",
+  "sources": [
+   "SysEx layout",
+   "NRPN 84 (0x54) sub 5"
+  ],
+  "observed_min": 32,
+  "observed_max": 117,
+  "observed_common": 32
+ },
+ {
+  "offset": 5,
+  "hex": "0x05",
+  "name": "Program name char 5",
+  "sources": [
+   "SysEx layout",
+   "NRPN 111 (0x6f)"
+  ],
+  "observed_min": 32,
+  "observed_max": 122,
+  "observed_common": 32
+ },
+ {
+  "offset": 6,
+  "hex": "0x06",
+  "name": "Program name char 6",
+  "sources": [
+   "SysEx layout",
+   "NRPN 112 (0x70)"
+  ],
+  "observed_min": 32,
+  "observed_max": 122,
+  "observed_common": 32
+ },
+ {
+  "offset": 7,
+  "hex": "0x07",
+  "name": "Program name char 7",
+  "sources": [
+   "SysEx layout"
+  ],
+  "observed_min": 32,
+  "observed_max": 122,
+  "observed_common": 32
+ },
+ {
+  "offset": 8,
+  "hex": "0x08",
+  "name": "Program name char 8",
+  "sources": [
+   "SysEx layout",
+   "NRPN 115 (0x73)"
+  ],
+  "observed_min": 32,
+  "observed_max": 121,
+  "observed_common": 32
+ },
+ {
+  "offset": 9,
+  "hex": "0x09",
+  "name": "Program name char 9",
+  "sources": [
+   "SysEx layout",
+   "NRPN 114 (0x72)"
+  ],
+  "observed_min": 32,
+  "observed_max": 121,
+  "observed_common": 32
+ },
+ {
+  "offset": 10,
+  "hex": "0x0a",
+  "name": "Program name char 10",
+  "sources": [
+   "SysEx layout",
+   "NRPN 84 (0x54) sub 4",
+   "NRPN 110 (0x6e) sub 6",
+   "NRPN 110 (0x6e) sub 9",
+   "NRPN 110 (0x6e) sub 10"
+  ],
+  "observed_min": 32,
+  "observed_max": 121,
+  "observed_common": 32
+ },
+ {
+  "offset": 11,
+  "hex": "0x0b",
+  "name": "Program name char 11",
+  "sources": [
+   "SysEx layout",
+   "CC 7 (0x07)"
+  ],
+  "observed_min": 32,
+  "observed_max": 120,
+  "observed_common": 32
+ },
+ {
+  "offset": 12,
+  "hex": "0x0c",
+  "name": "Program name char 12",
+  "sources": [
+   "SysEx layout"
+  ],
+  "observed_min": 32,
+  "observed_max": 122,
+  "observed_common": 32
+ },
+ {
+  "offset": 13,
+  "hex": "0x0d",
+  "name": "Program name char 13",
+  "sources": [
+   "SysEx layout"
+  ],
+  "observed_min": 32,
+  "observed_max": 117,
+  "observed_common": 32
+ },
+ {
+  "offset": 14,
+  "hex": "0x0e",
+  "name": "Program name char 14",
+  "sources": [
+   "SysEx layout"
+  ],
+  "observed_min": 32,
+  "observed_max": 116,
+  "observed_common": 32
+ },
+ {
+  "offset": 15,
+  "hex": "0x0f",
+  "name": "Program name char 15",
+  "sources": [
+   "SysEx layout"
+  ],
+  "observed_min": 32,
+  "observed_max": 116,
+  "observed_common": 32
+ },
+ {
+  "offset": 16,
+  "hex": "0x10",
+  "name": "Header (always 0)",
+  "sources": [
+   "data",
+   "NRPN 102 (0x66)",
+   "packed NRPN data code"
+  ],
+  "observed_min": 0,
+  "observed_max": 0,
+  "observed_common": 0
+ },
+ {
+  "offset": 17,
+  "hex": "0x11",
+  "name": "Category",
+  "sources": [
+   "panel+strings"
+  ],
+  "observed_min": 0,
+  "observed_max": 14,
+  "observed_common": 2
+ },
+ {
+  "offset": 18,
+  "hex": "0x12",
+  "name": "Header mode byte 0x12",
+  "sources": [
+   "panel keys 0x10-0x12, 0x01, 0x09"
+  ],
+  "observed_min": 0,
+  "observed_max": 5,
+  "observed_common": 2
+ },
+ {
+  "offset": 19,
+  "hex": "0x13",
+  "name": "Header mode byte 0x13 (bits0-2 and bits3-5, each 0..4)",
+  "sources": [
+   "panel keys 0x13-0x17 / 0x1b-0x1f"
+  ],
+  "observed_min": 0,
+  "observed_max": 36,
+  "observed_common": 35
+ },
+ {
+  "offset": 20,
+  "hex": "0x14",
+  "name": "Header byte 0x14 (high nibble 0..4, low nibble 0/1)",
+  "sources": [
+   "panel keys 0x29-0x2f"
+  ],
+  "observed_min": 0,
+  "observed_max": 65,
+  "observed_common": 48
+ },
+ {
+  "offset": 21,
+  "hex": "0x15",
+  "name": "Header byte 0x15 (bits0-1 0..2, bit2, bit5)",
+  "sources": [
+   "panel keys 0x18-0x1a, 0x49/0x4a"
+  ],
+  "observed_min": 32,
+  "observed_max": 38,
+  "observed_common": 38
+ },
+ {
+  "offset": 22,
+  "hex": "0x16",
+  "name": "Osc 1 Waveform (osc n: 10n + 0..4)",
+  "sources": [
+   "oscillator block 0, rel 0"
+  ],
+  "observed_min": 0,
+  "observed_max": 4,
+  "observed_common": 0
+ },
+ {
+  "offset": 23,
+  "hex": "0x17",
+  "name": "Osc 1 Octave",
+  "sources": [
+   "oscillator block 0, rel 1"
+  ],
+  "observed_min": 30,
+  "observed_max": 34,
+  "observed_common": 32
+ },
+ {
+  "offset": 24,
+  "hex": "0x18",
+  "name": "Osc 1 Coarse tune (semitone)",
+  "sources": [
+   "oscillator block 0, rel 2"
+  ],
+  "observed_min": 50,
+  "observed_max": 69,
+  "observed_common": 57
+ },
+ {
+  "offset": 25,
+  "hex": "0x19",
+  "name": "Osc 1 Fine Tune",
+  "sources": [
+   "oscillator block 0, rel 3",
+   "CC 11 (0x0b)"
+  ],
+  "observed_min": 16,
+  "observed_max": 110,
+  "observed_common": 64
+ },
+ {
+  "offset": 26,
+  "hex": "0x1a",
+  "name": "Osc 1 parameter rel 4",
+  "sources": [
+   "oscillator block 0, rel 4",
+   "NRPN 84 (0x54) sub 1"
+  ],
+  "observed_min": 66,
+  "observed_max": 66,
+  "observed_common": 66
+ },
+ {
+  "offset": 27,
+  "hex": "0x1b",
+  "name": "Osc 1 Man knob pitch",
+  "sources": [
+   "oscillator block 0, rel 5",
+   "NRPN 17 (0x11)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 28,
+  "hex": "0x1c",
+  "name": "Osc 1 Mod knob Wh pitch",
+  "sources": [
+   "oscillator block 0, rel 6",
+   "NRPN 3 (0x03)"
+  ],
+  "observed_min": 52,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 29,
+  "hex": "0x1d",
+  "name": "Osc 1 Pitch Env 2",
+  "sources": [
+   "oscillator block 0, rel 7",
+   "CC 20 (0x14)"
+  ],
+  "observed_min": 7,
+  "observed_max": 89,
+  "observed_common": 64
+ },
+ {
+  "offset": 30,
+  "hex": "0x1e",
+  "name": "Osc 1 Pitch Env 3",
+  "sources": [
+   "oscillator block 0, rel 8",
+   "CC 66 (0x42)"
+  ],
+  "observed_min": 38,
+  "observed_max": 92,
+  "observed_common": 64
+ },
+ {
+  "offset": 31,
+  "hex": "0x1f",
+  "name": "Osc 1 Pitch LFO 1",
+  "sources": [
+   "oscillator block 0, rel 9",
+   "CC 21 (0x15)"
+  ],
+  "observed_min": 61,
+  "observed_max": 81,
+  "observed_common": 64
+ },
+ {
+  "offset": 32,
+  "hex": "0x20",
+  "name": "Osc 1 Mod knob LFO 2 pitch",
+  "sources": [
+   "oscillator block 0, rel 10",
+   "NRPN 2 (0x02)"
+  ],
+  "observed_min": 64,
+  "observed_max": 66,
+  "observed_common": 64
+ },
+ {
+  "offset": 33,
+  "hex": "0x21",
+  "name": "Osc 1 Wh LFO 1 intensity",
+  "sources": [
+   "oscillator block 0, rel 11",
+   "NRPN 69 (0x45)"
+  ],
+  "observed_min": 60,
+  "observed_max": 74,
+  "observed_common": 64
+ },
+ {
+  "offset": 34,
+  "hex": "0x22",
+  "name": "Osc 1 Aftertouch LFO 1 intensity",
+  "sources": [
+   "oscillator block 0, rel 12",
+   "NRPN 72 (0x48)"
+  ],
+  "observed_min": 60,
+  "observed_max": 74,
+  "observed_common": 70
+ },
+ {
+  "offset": 35,
+  "hex": "0x23",
+  "name": "Osc 1 Soften",
+  "sources": [
+   "oscillator block 0, rel 13",
+   "CC 13 (0x0d)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 36,
+  "hex": "0x24",
+  "name": "Osc 1 Mod knob Wh hardness",
+  "sources": [
+   "oscillator block 0, rel 14",
+   "NRPN 12 (0x0c)"
+  ],
+  "observed_min": 64,
+  "observed_max": 65,
+  "observed_common": 64
+ },
+ {
+  "offset": 37,
+  "hex": "0x25",
+  "name": "Osc 1 Soften Env 2",
+  "sources": [
+   "oscillator block 0, rel 15",
+   "CC 61 (0x3d)"
+  ],
+  "observed_min": 9,
+  "observed_max": 73,
+  "observed_common": 64
+ },
+ {
+  "offset": 38,
+  "hex": "0x26",
+  "name": "Osc 1 Mod knob Env 3 hardness",
+  "sources": [
+   "oscillator block 0, rel 16",
+   "NRPN 9 (0x09)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 39,
+  "hex": "0x27",
+  "name": "Osc 1 Mod knob LFO 1 hardness",
+  "sources": [
+   "oscillator block 0, rel 17",
+   "NRPN 10 (0x0a)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 40,
+  "hex": "0x28",
+  "name": "Osc 1 Mod knob LFO 2 hardness",
+  "sources": [
+   "oscillator block 0, rel 18",
+   "NRPN 11 (0x0b)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 41,
+  "hex": "0x29",
+  "name": "Osc 1 Pulse Width",
+  "sources": [
+   "oscillator block 0, rel 19",
+   "CC 22 (0x16)"
+  ],
+  "observed_min": 14,
+  "observed_max": 124,
+  "observed_common": 64
+ },
+ {
+  "offset": 42,
+  "hex": "0x2a",
+  "name": "Osc 1 Mod knob Wh width",
+  "sources": [
+   "oscillator block 0, rel 20",
+   "NRPN 5 (0x05)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 43,
+  "hex": "0x2b",
+  "name": "Osc 1 Width Env 2",
+  "sources": [
+   "oscillator block 0, rel 21",
+   "CC 43 (0x2b)"
+  ],
+  "observed_min": 64,
+  "observed_max": 80,
+  "observed_common": 64
+ },
+ {
+  "offset": 44,
+  "hex": "0x2c",
+  "name": "Osc 1 Mod knob Env 3 width",
+  "sources": [
+   "oscillator block 0, rel 22",
+   "NRPN 4 (0x04)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 45,
+  "hex": "0x2d",
+  "name": "Osc 1 Width LFO 1",
+  "sources": [
+   "oscillator block 0, rel 23",
+   "CC 46 (0x2e)"
+  ],
+  "observed_min": 62,
+  "observed_max": 103,
+  "observed_common": 64
+ },
+ {
+  "offset": 46,
+  "hex": "0x2e",
+  "name": "Osc 1 Width LFO 2",
+  "sources": [
+   "oscillator block 0, rel 24",
+   "CC 69 (0x45)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 47,
+  "hex": "0x2f",
+  "name": "Osc 1 Sync",
+  "sources": [
+   "oscillator block 0, rel 25",
+   "CC 49 (0x31)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 48,
+  "hex": "0x30",
+  "name": "Osc 1 Mod knob Wh sync",
+  "sources": [
+   "oscillator block 0, rel 26",
+   "NRPN 8 (0x08)"
+  ],
+  "observed_min": 64,
+  "observed_max": 84,
+  "observed_common": 64
+ },
+ {
+  "offset": 49,
+  "hex": "0x31",
+  "name": "Osc 1 Sync Env 2",
+  "sources": [
+   "oscillator block 0, rel 27",
+   "CC 52 (0x34)",
+   "NRPN 0 (0x00) sub 12",
+   "NRPN 0 (0x00) sub 13"
+  ],
+  "observed_min": 1,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 50,
+  "hex": "0x32",
+  "name": "Osc 1 Mod knob Env 3 sync",
+  "sources": [
+   "oscillator block 0, rel 28",
+   "NRPN 6 (0x06)"
+  ],
+  "observed_min": 64,
+  "observed_max": 126,
+  "observed_common": 64
+ },
+ {
+  "offset": 51,
+  "hex": "0x33",
+  "name": "Osc 1 Sync LFO 1",
+  "sources": [
+   "oscillator block 0, rel 29",
+   "CC 55 (0x37)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 52,
+  "hex": "0x34",
+  "name": "Osc 1 Mod knob LFO 2 sync",
+  "sources": [
+   "oscillator block 0, rel 30",
+   "NRPN 7 (0x07)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 53,
+  "hex": "0x35",
+  "name": "Osc 1 Key sync",
+  "sources": [
+   "oscillator block 0, rel 31",
+   "NRPN 78 (0x4e)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 54,
+  "hex": "0x36",
+  "name": "Osc 1 Sync skew",
+  "sources": [
+   "oscillator block 0, rel 32",
+   "NRPN 81 (0x51)"
+  ],
+  "observed_min": 64,
+  "observed_max": 114,
+  "observed_common": 64
+ },
+ {
+  "offset": 55,
+  "hex": "0x37",
+  "name": "Osc 1 Sync formant width",
+  "sources": [
+   "oscillator block 0, rel 33",
+   "NRPN 75 (0x4b)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 56,
+  "hex": "0x38",
+  "name": "Osc 2 Waveform (osc n: 10n + 0..4)",
+  "sources": [
+   "oscillator block 1, rel 0"
+  ],
+  "observed_min": 10,
+  "observed_max": 14,
+  "observed_common": 11
+ },
+ {
+  "offset": 57,
+  "hex": "0x39",
+  "name": "Osc 2 Octave",
+  "sources": [
+   "oscillator block 1, rel 1"
+  ],
+  "observed_min": 35,
+  "observed_max": 39,
+  "observed_common": 37
+ },
+ {
+  "offset": 58,
+  "hex": "0x3a",
+  "name": "Osc 2 Coarse tune (semitone)",
+  "sources": [
+   "oscillator block 1, rel 2"
+  ],
+  "observed_min": 75,
+  "observed_max": 94,
+  "observed_common": 82
+ },
+ {
+  "offset": 59,
+  "hex": "0x3b",
+  "name": "Osc 2 Fine Tune",
+  "sources": [
+   "oscillator block 1, rel 3",
+   "CC 23 (0x17)"
+  ],
+  "observed_min": 54,
+  "observed_max": 76,
+  "observed_common": 64
+ },
+ {
+  "offset": 60,
+  "hex": "0x3c",
+  "name": "Osc 2 parameter rel 4",
+  "sources": [
+   "oscillator block 1, rel 4",
+   "NRPN 84 (0x54) sub 2"
+  ],
+  "observed_min": 66,
+  "observed_max": 67,
+  "observed_common": 66
+ },
+ {
+  "offset": 61,
+  "hex": "0x3d",
+  "name": "Osc 2 Man knob pitch",
+  "sources": [
+   "oscillator block 1, rel 5",
+   "NRPN 33 (0x21)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 62,
+  "hex": "0x3e",
+  "name": "Osc 2 Mod knob Wh pitch",
+  "sources": [
+   "oscillator block 1, rel 6",
+   "NRPN 19 (0x13)"
+  ],
+  "observed_min": 59,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 63,
+  "hex": "0x3f",
+  "name": "Osc 2 Pitch Env 2",
+  "sources": [
+   "oscillator block 1, rel 7",
+   "CC 25 (0x19)"
+  ],
+  "observed_min": 40,
+  "observed_max": 89,
+  "observed_common": 64
+ },
+ {
+  "offset": 64,
+  "hex": "0x40",
+  "name": "Osc 2 Pitch Env 3",
+  "sources": [
+   "oscillator block 1, rel 8",
+   "CC 67 (0x43)"
+  ],
+  "observed_min": 40,
+  "observed_max": 95,
+  "observed_common": 64
+ },
+ {
+  "offset": 65,
+  "hex": "0x41",
+  "name": "Osc 2 Pitch LFO 1",
+  "sources": [
+   "oscillator block 1, rel 9",
+   "CC 26 (0x1a)"
+  ],
+  "observed_min": 56,
+  "observed_max": 92,
+  "observed_common": 64
+ },
+ {
+  "offset": 66,
+  "hex": "0x42",
+  "name": "Osc 2 Mod knob LFO 2 pitch",
+  "sources": [
+   "oscillator block 1, rel 10",
+   "NRPN 18 (0x12)"
+  ],
+  "observed_min": 64,
+  "observed_max": 67,
+  "observed_common": 64
+ },
+ {
+  "offset": 67,
+  "hex": "0x43",
+  "name": "Osc 2 Wh LFO 1 intensity",
+  "sources": [
+   "oscillator block 1, rel 11",
+   "NRPN 70 (0x46)"
+  ],
+  "observed_min": 64,
+  "observed_max": 74,
+  "observed_common": 64
+ },
+ {
+  "offset": 68,
+  "hex": "0x44",
+  "name": "Osc 2 Aftertouch LFO 1 intensity",
+  "sources": [
+   "oscillator block 1, rel 12",
+   "NRPN 73 (0x49)"
+  ],
+  "observed_min": 60,
+  "observed_max": 73,
+  "observed_common": 70
+ },
+ {
+  "offset": 69,
+  "hex": "0x45",
+  "name": "Osc 2 Soften",
+  "sources": [
+   "oscillator block 1, rel 13",
+   "CC 14 (0x0e)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 70,
+  "hex": "0x46",
+  "name": "Osc 2 Mod knob Wh hardness",
+  "sources": [
+   "oscillator block 1, rel 14",
+   "NRPN 28 (0x1c)"
+  ],
+  "observed_min": 64,
+  "observed_max": 65,
+  "observed_common": 64
+ },
+ {
+  "offset": 71,
+  "hex": "0x47",
+  "name": "Osc 2 Soften Env 2",
+  "sources": [
+   "oscillator block 1, rel 15",
+   "CC 62 (0x3e)"
+  ],
+  "observed_min": 64,
+  "observed_max": 74,
+  "observed_common": 64
+ },
+ {
+  "offset": 72,
+  "hex": "0x48",
+  "name": "Osc 2 Mod knob Env 3 hardness",
+  "sources": [
+   "oscillator block 1, rel 16",
+   "NRPN 25 (0x19)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 73,
+  "hex": "0x49",
+  "name": "Osc 2 Mod knob LFO 1 hardness",
+  "sources": [
+   "oscillator block 1, rel 17",
+   "NRPN 26 (0x1a)"
+  ],
+  "observed_min": 1,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 74,
+  "hex": "0x4a",
+  "name": "Osc 2 Mod knob LFO 2 hardness",
+  "sources": [
+   "oscillator block 1, rel 18",
+   "NRPN 27 (0x1b)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 75,
+  "hex": "0x4b",
+  "name": "Osc 2 Pulse Width",
+  "sources": [
+   "oscillator block 1, rel 19",
+   "CC 27 (0x1b)"
+  ],
+  "observed_min": 15,
+  "observed_max": 124,
+  "observed_common": 64
+ },
+ {
+  "offset": 76,
+  "hex": "0x4c",
+  "name": "Osc 2 Mod knob Wh width",
+  "sources": [
+   "oscillator block 1, rel 20",
+   "NRPN 21 (0x15)"
+  ],
+  "observed_min": 64,
+  "observed_max": 112,
+  "observed_common": 64
+ },
+ {
+  "offset": 77,
+  "hex": "0x4d",
+  "name": "Osc 2 Width Env 2",
+  "sources": [
+   "oscillator block 1, rel 21",
+   "CC 44 (0x2c)"
+  ],
+  "observed_min": 64,
+  "observed_max": 84,
+  "observed_common": 64
+ },
+ {
+  "offset": 78,
+  "hex": "0x4e",
+  "name": "Osc 2 Mod knob Env 3 width",
+  "sources": [
+   "oscillator block 1, rel 22",
+   "NRPN 20 (0x14)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 79,
+  "hex": "0x4f",
+  "name": "Osc 2 Width LFO 1",
+  "sources": [
+   "oscillator block 1, rel 23",
+   "CC 47 (0x2f)"
+  ],
+  "observed_min": 28,
+  "observed_max": 87,
+  "observed_common": 64
+ },
+ {
+  "offset": 80,
+  "hex": "0x50",
+  "name": "Osc 2 Width LFO 2",
+  "sources": [
+   "oscillator block 1, rel 24",
+   "CC 70 (0x46)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 81,
+  "hex": "0x51",
+  "name": "Osc 2 Sync",
+  "sources": [
+   "oscillator block 1, rel 25",
+   "CC 50 (0x32)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 82,
+  "hex": "0x52",
+  "name": "Osc 2 Mod knob Wh sync",
+  "sources": [
+   "oscillator block 1, rel 26",
+   "NRPN 24 (0x18)"
+  ],
+  "observed_min": 64,
+  "observed_max": 120,
+  "observed_common": 64
+ },
+ {
+  "offset": 83,
+  "hex": "0x53",
+  "name": "Osc 2 Sync Env 2",
+  "sources": [
+   "oscillator block 1, rel 27",
+   "CC 53 (0x35)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 84,
+  "hex": "0x54",
+  "name": "Osc 2 Mod knob Env 3 sync",
+  "sources": [
+   "oscillator block 1, rel 28",
+   "NRPN 22 (0x16)"
+  ],
+  "observed_min": 64,
+  "observed_max": 99,
+  "observed_common": 64
+ },
+ {
+  "offset": 85,
+  "hex": "0x55",
+  "name": "Osc 2 Sync LFO 1",
+  "sources": [
+   "oscillator block 1, rel 29",
+   "CC 56 (0x38)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 86,
+  "hex": "0x56",
+  "name": "Osc 2 Mod knob LFO 2 sync",
+  "sources": [
+   "oscillator block 1, rel 30",
+   "NRPN 23 (0x17)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 87,
+  "hex": "0x57",
+  "name": "Osc 2 Key sync",
+  "sources": [
+   "oscillator block 1, rel 31",
+   "NRPN 79 (0x4f)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 88,
+  "hex": "0x58",
+  "name": "Osc 2 Sync skew",
+  "sources": [
+   "oscillator block 1, rel 32",
+   "NRPN 82 (0x52)"
+  ],
+  "observed_min": 0,
+  "observed_max": 124,
+  "observed_common": 64
+ },
+ {
+  "offset": 89,
+  "hex": "0x59",
+  "name": "Osc 2 Sync formant width",
+  "sources": [
+   "oscillator block 1, rel 33",
+   "NRPN 76 (0x4c)"
+  ],
+  "observed_min": 127,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 90,
+  "hex": "0x5a",
+  "name": "Osc 3 Waveform (osc n: 10n + 0..4)",
+  "sources": [
+   "oscillator block 2, rel 0"
+  ],
+  "observed_min": 20,
+  "observed_max": 24,
+  "observed_common": 21
+ },
+ {
+  "offset": 91,
+  "hex": "0x5b",
+  "name": "Osc 3 Octave",
+  "sources": [
+   "oscillator block 2, rel 1"
+  ],
+  "observed_min": 40,
+  "observed_max": 44,
+  "observed_common": 42
+ },
+ {
+  "offset": 92,
+  "hex": "0x5c",
+  "name": "Osc 3 Coarse tune (semitone)",
+  "sources": [
+   "oscillator block 2, rel 2"
+  ],
+  "observed_min": 95,
+  "observed_max": 119,
+  "observed_common": 107
+ },
+ {
+  "offset": 93,
+  "hex": "0x5d",
+  "name": "Osc 3 Fine Tune",
+  "sources": [
+   "oscillator block 2, rel 3",
+   "CC 12 (0x0c)"
+  ],
+  "observed_min": 45,
+  "observed_max": 114,
+  "observed_common": 64
+ },
+ {
+  "offset": 94,
+  "hex": "0x5e",
+  "name": "Osc 3 parameter rel 4",
+  "sources": [
+   "oscillator block 2, rel 4",
+   "NRPN 84 (0x54) sub 3"
+  ],
+  "observed_min": 66,
+  "observed_max": 71,
+  "observed_common": 66
+ },
+ {
+  "offset": 95,
+  "hex": "0x5f",
+  "name": "Osc 3 Man knob pitch",
+  "sources": [
+   "oscillator block 2, rel 5",
+   "NRPN 49 (0x31)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 96,
+  "hex": "0x60",
+  "name": "Osc 3 Mod knob Wh pitch",
+  "sources": [
+   "oscillator block 2, rel 6",
+   "NRPN 35 (0x23)"
+  ],
+  "observed_min": 52,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 97,
+  "hex": "0x61",
+  "name": "Osc 3 Pitch Env 2",
+  "sources": [
+   "oscillator block 2, rel 7",
+   "CC 40 (0x28)"
+  ],
+  "observed_min": 0,
+  "observed_max": 89,
+  "observed_common": 64
+ },
+ {
+  "offset": 98,
+  "hex": "0x62",
+  "name": "Osc 3 Pitch Env 3",
+  "sources": [
+   "oscillator block 2, rel 8",
+   "CC 68 (0x44)"
+  ],
+  "observed_min": 47,
+  "observed_max": 105,
+  "observed_common": 64
+ },
+ {
+  "offset": 99,
+  "hex": "0x63",
+  "name": "Osc 3 Pitch LFO 1",
+  "sources": [
+   "oscillator block 2, rel 9",
+   "CC 41 (0x29)"
+  ],
+  "observed_min": 64,
+  "observed_max": 72,
+  "observed_common": 64
+ },
+ {
+  "offset": 100,
+  "hex": "0x64",
+  "name": "Osc 3 Mod knob LFO 2 pitch",
+  "sources": [
+   "oscillator block 2, rel 10",
+   "NRPN 34 (0x22)"
+  ],
+  "observed_min": 64,
+  "observed_max": 75,
+  "observed_common": 64
+ },
+ {
+  "offset": 101,
+  "hex": "0x65",
+  "name": "Osc 3 Wh LFO 1 intensity",
+  "sources": [
+   "oscillator block 2, rel 11",
+   "NRPN 71 (0x47)"
+  ],
+  "observed_min": 64,
+  "observed_max": 74,
+  "observed_common": 70
+ },
+ {
+  "offset": 102,
+  "hex": "0x66",
+  "name": "Osc 3 Aftertouch LFO 1 intensity",
+  "sources": [
+   "oscillator block 2, rel 12",
+   "NRPN 74 (0x4a)"
+  ],
+  "observed_min": 64,
+  "observed_max": 70,
+  "observed_common": 70
+ },
+ {
+  "offset": 103,
+  "hex": "0x67",
+  "name": "Osc 3 Soften",
+  "sources": [
+   "oscillator block 2, rel 13",
+   "CC 15 (0x0f)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 104,
+  "hex": "0x68",
+  "name": "Osc 3 Mod knob Wh hardness",
+  "sources": [
+   "oscillator block 2, rel 14",
+   "NRPN 44 (0x2c)"
+  ],
+  "observed_min": 64,
+  "observed_max": 72,
+  "observed_common": 64
+ },
+ {
+  "offset": 105,
+  "hex": "0x69",
+  "name": "Osc 3 Soften Env 2",
+  "sources": [
+   "oscillator block 2, rel 15",
+   "CC 63 (0x3f)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 106,
+  "hex": "0x6a",
+  "name": "Osc 3 Mod knob Env 3 hardness",
+  "sources": [
+   "oscillator block 2, rel 16",
+   "NRPN 41 (0x29)"
+  ],
+  "observed_min": 1,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 107,
+  "hex": "0x6b",
+  "name": "Osc 3 Mod knob LFO 1 hardness",
+  "sources": [
+   "oscillator block 2, rel 17",
+   "NRPN 42 (0x2a)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 108,
+  "hex": "0x6c",
+  "name": "Osc 3 Mod knob LFO 2 hardness",
+  "sources": [
+   "oscillator block 2, rel 18",
+   "NRPN 43 (0x2b)"
+  ],
+  "observed_min": 43,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 109,
+  "hex": "0x6d",
+  "name": "Osc 3 Pulse Width",
+  "sources": [
+   "oscillator block 2, rel 19",
+   "CC 42 (0x2a)"
+  ],
+  "observed_min": 0,
+  "observed_max": 124,
+  "observed_common": 64
+ },
+ {
+  "offset": 110,
+  "hex": "0x6e",
+  "name": "Osc 3 Mod knob Wh width",
+  "sources": [
+   "oscillator block 2, rel 20",
+   "NRPN 37 (0x25)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 111,
+  "hex": "0x6f",
+  "name": "Osc 3 Width Env 2",
+  "sources": [
+   "oscillator block 2, rel 21",
+   "CC 45 (0x2d)"
+  ],
+  "observed_min": 64,
+  "observed_max": 83,
+  "observed_common": 64
+ },
+ {
+  "offset": 112,
+  "hex": "0x70",
+  "name": "Osc 3 Mod knob Env 3 width",
+  "sources": [
+   "oscillator block 2, rel 22",
+   "NRPN 36 (0x24)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 113,
+  "hex": "0x71",
+  "name": "Osc 3 Width LFO 1",
+  "sources": [
+   "oscillator block 2, rel 23",
+   "CC 48 (0x30)"
+  ],
+  "observed_min": 41,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 114,
+  "hex": "0x72",
+  "name": "Osc 3 Width LFO 2",
+  "sources": [
+   "oscillator block 2, rel 24",
+   "CC 71 (0x47)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 115,
+  "hex": "0x73",
+  "name": "Osc 3 Sync",
+  "sources": [
+   "oscillator block 2, rel 25",
+   "CC 51 (0x33)"
+  ],
+  "observed_min": 0,
+  "observed_max": 101,
+  "observed_common": 0
+ },
+ {
+  "offset": 116,
+  "hex": "0x74",
+  "name": "Osc 3 Mod knob Wh sync",
+  "sources": [
+   "oscillator block 2, rel 26",
+   "NRPN 40 (0x28)"
+  ],
+  "observed_min": 64,
+  "observed_max": 84,
+  "observed_common": 64
+ },
+ {
+  "offset": 117,
+  "hex": "0x75",
+  "name": "Osc 3 Sync Env 2",
+  "sources": [
+   "oscillator block 2, rel 27",
+   "CC 54 (0x36)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 118,
+  "hex": "0x76",
+  "name": "Osc 3 Mod knob Env 3 sync",
+  "sources": [
+   "oscillator block 2, rel 28",
+   "NRPN 38 (0x26)"
+  ],
+  "observed_min": 0,
+  "observed_max": 101,
+  "observed_common": 64
+ },
+ {
+  "offset": 119,
+  "hex": "0x77",
+  "name": "Osc 3 Sync LFO 1",
+  "sources": [
+   "oscillator block 2, rel 29",
+   "CC 57 (0x39)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 120,
+  "hex": "0x78",
+  "name": "Osc 3 Mod knob LFO 2 sync",
+  "sources": [
+   "oscillator block 2, rel 30",
+   "NRPN 39 (0x27)"
+  ],
+  "observed_min": 19,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 121,
+  "hex": "0x79",
+  "name": "Osc 3 Key sync",
+  "sources": [
+   "oscillator block 2, rel 31",
+   "NRPN 80 (0x50)"
+  ],
+  "observed_min": 0,
+  "observed_max": 0,
+  "observed_common": 0
+ },
+ {
+  "offset": 122,
+  "hex": "0x7a",
+  "name": "Osc 3 Sync skew",
+  "sources": [
+   "oscillator block 2, rel 32",
+   "NRPN 83 (0x53)"
+  ],
+  "observed_min": 64,
+  "observed_max": 92,
+  "observed_common": 64
+ },
+ {
+  "offset": 123,
+  "hex": "0x7b",
+  "name": "Osc 3 Sync formant width",
+  "sources": [
+   "oscillator block 2, rel 33",
+   "NRPN 77 (0x4d)"
+  ],
+  "observed_min": 117,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 124,
+  "hex": "0x7c",
+  "name": "Osc 1 Mix Level",
+  "sources": [
+   "CC 28 (0x1c)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 125,
+  "hex": "0x7d",
+  "name": "Osc 1 Mod knob Wh mix",
+  "sources": [
+   "NRPN 16 (0x10)"
+  ],
+  "observed_min": 1,
+  "observed_max": 103,
+  "observed_common": 64
+ },
+ {
+  "offset": 126,
+  "hex": "0x7e",
+  "name": "Osc 1 Mix Env 2",
+  "sources": [
+   "CC 36 (0x24)",
+   "NRPN 124 (0x7c)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 127,
+  "hex": "0x7f",
+  "name": "Osc 1 Mod knob Env 3 mix",
+  "sources": [
+   "NRPN 13 (0x0d)",
+   "NRPN 126 (0x7e)"
+  ],
+  "observed_min": 0,
+  "observed_max": 104,
+  "observed_common": 64
+ },
+ {
+  "offset": 128,
+  "hex": "0x80",
+  "name": "Osc 1 Mod knob LFO 1 mix",
+  "sources": [
+   "NRPN 14 (0x0e)",
+   "NRPN 1 (0x01) sub 5",
+   "NRPN 1 (0x01) sub 6"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 129,
+  "hex": "0x81",
+  "name": "Osc 1 Mod knob LFO 2 mix",
+  "sources": [
+   "NRPN 15 (0x0f)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 130,
+  "hex": "0x82",
+  "name": "Osc 2 Mix Level",
+  "sources": [
+   "CC 29 (0x1d)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 131,
+  "hex": "0x83",
+  "name": "Osc 2 Mod knob Wh mix",
+  "sources": [
+   "NRPN 32 (0x20)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 132,
+  "hex": "0x84",
+  "name": "Osc 2 Mix Env 2",
+  "sources": [
+   "CC 37 (0x25)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 133,
+  "hex": "0x85",
+  "name": "Osc 2 Mod knob Env 3 mix",
+  "sources": [
+   "NRPN 29 (0x1d)"
+  ],
+  "observed_min": 0,
+  "observed_max": 95,
+  "observed_common": 64
+ },
+ {
+  "offset": 134,
+  "hex": "0x86",
+  "name": "Osc 2 Mod knob LFO 1 mix",
+  "sources": [
+   "NRPN 30 (0x1e)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 135,
+  "hex": "0x87",
+  "name": "Osc 2 Mod knob LFO 2 mix",
+  "sources": [
+   "NRPN 31 (0x1f)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 136,
+  "hex": "0x88",
+  "name": "Osc 3 Mix Level",
+  "sources": [
+   "CC 33 (0x21)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 137,
+  "hex": "0x89",
+  "name": "Osc 3 Mod knob Wh mix",
+  "sources": [
+   "NRPN 48 (0x30)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 138,
+  "hex": "0x8a",
+  "name": "Osc 3 Mix Env 2",
+  "sources": [
+   "CC 38 (0x26)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 139,
+  "hex": "0x8b",
+  "name": "Osc 3 Mod knob Env 3 mix",
+  "sources": [
+   "NRPN 45 (0x2d)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 140,
+  "hex": "0x8c",
+  "name": "Osc 3 Mod knob LFO 1 mix",
+  "sources": [
+   "NRPN 46 (0x2e)"
+  ],
+  "observed_min": 0,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 141,
+  "hex": "0x8d",
+  "name": "Osc 3 Mod knob LFO 2 mix",
+  "sources": [
+   "NRPN 47 (0x2f)",
+   "NRPN 1 (0x01) sub 3",
+   "NRPN 1 (0x01) sub 4"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 142,
+  "hex": "0x8e",
+  "name": "Ring Modulator 1 * 3 Mix Level",
+  "sources": [
+   "CC 31 (0x1f)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 143,
+  "hex": "0x8f",
+  "name": "1*3 Mod knob Wh mix",
+  "sources": [
+   "NRPN 54 (0x36)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 144,
+  "hex": "0x90",
+  "name": "1*3 Mod knob Env 2 mix",
+  "sources": [
+   "NRPN 50 (0x32)"
+  ],
+  "observed_min": 0,
+  "observed_max": 73,
+  "observed_common": 64
+ },
+ {
+  "offset": 145,
+  "hex": "0x91",
+  "name": "1*3 Mod knob Env 3 mix",
+  "sources": [
+   "NRPN 51 (0x33)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 146,
+  "hex": "0x92",
+  "name": "1*3 Mod knob LFO 1 mix",
+  "sources": [
+   "NRPN 52 (0x34)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 147,
+  "hex": "0x93",
+  "name": "1*3 Mod knob LFO 2 mix",
+  "sources": [
+   "NRPN 53 (0x35)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 148,
+  "hex": "0x94",
+  "name": "Ring Modulator 2 * 3 Mix Level",
+  "sources": [
+   "CC 4 (0x04)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 149,
+  "hex": "0x95",
+  "name": "2*3 Mod knob Wh mix",
+  "sources": [
+   "NRPN 59 (0x3b)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 150,
+  "hex": "0x96",
+  "name": "2*3 Mod knob Env 2 mix",
+  "sources": [
+   "NRPN 55 (0x37)"
+  ],
+  "observed_min": 0,
+  "observed_max": 69,
+  "observed_common": 64
+ },
+ {
+  "offset": 151,
+  "hex": "0x97",
+  "name": "2*3 Mod knob Env 3 mix",
+  "sources": [
+   "NRPN 56 (0x38)"
+  ],
+  "observed_min": 64,
+  "observed_max": 95,
+  "observed_common": 64
+ },
+ {
+  "offset": 152,
+  "hex": "0x98",
+  "name": "2*3 Mod knob LFO 1 mix",
+  "sources": [
+   "NRPN 57 (0x39)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 153,
+  "hex": "0x99",
+  "name": "2*3 Mod knob LFO 2 mix",
+  "sources": [
+   "NRPN 58 (0x3a)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 154,
+  "hex": "0x9a",
+  "name": "Noise Mix Level",
+  "sources": [
+   "CC 30 (0x1e)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 155,
+  "hex": "0x9b",
+  "name": "Noise Mod knob Wh mix",
+  "sources": [
+   "NRPN 68 (0x44)"
+  ],
+  "observed_min": 63,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 156,
+  "hex": "0x9c",
+  "name": "Noise Mix Env 2",
+  "sources": [
+   "CC 39 (0x27)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 157,
+  "hex": "0x9d",
+  "name": "Noise Mod knob Env 3 mix",
+  "sources": [
+   "NRPN 65 (0x41)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 158,
+  "hex": "0x9e",
+  "name": "Noise Mod knob LFO 1 mix",
+  "sources": [
+   "NRPN 66 (0x42)"
+  ],
+  "observed_min": 1,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 159,
+  "hex": "0x9f",
+  "name": "Noise Mod knob LFO 2 mix",
+  "sources": [
+   "NRPN 67 (0x43)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 160,
+  "hex": "0xa0",
+  "name": "LFO 1 Delay",
+  "sources": [
+   "CC 17 (0x11)"
+  ],
+  "observed_min": 0,
+  "observed_max": 86,
+  "observed_common": 0
+ },
+ {
+  "offset": 161,
+  "hex": "0xa1",
+  "name": "LFO 1 waveform (16=square, 17=saw, 18=triangle, 19=s/h)",
+  "sources": [
+   "packed NRPN data code"
+  ],
+  "observed_min": 16,
+  "observed_max": 19,
+  "observed_common": 18
+ },
+ {
+  "offset": 162,
+  "hex": "0xa2",
+  "name": "LFO 1 Offset",
+  "sources": [
+   "CC 82 (0x52)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 163,
+  "hex": "0xa3",
+  "name": "LFO 1 Speed",
+  "sources": [
+   "CC 16 (0x10)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 104
+ },
+ {
+  "offset": 164,
+  "hex": "0xa4",
+  "name": "LFO 1 Speed Env 3",
+  "sources": [
+   "CC 80 (0x50)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 165,
+  "hex": "0xa5",
+  "name": "LFO 1 speed Wh depth",
+  "sources": [
+   "NRPN 103 (0x67)"
+  ],
+  "observed_min": 64,
+  "observed_max": 68,
+  "observed_common": 64
+ },
+ {
+  "offset": 166,
+  "hex": "0xa6",
+  "name": "LFO 1 Speed Aftertouch depth",
+  "sources": [
+   "NRPN 85 (0x55)"
+  ],
+  "observed_min": 64,
+  "observed_max": 84,
+  "observed_common": 66
+ },
+ {
+  "offset": 167,
+  "hex": "0xa7",
+  "name": "",
+  "sources": [
+   "NRPN 110 (0x6e) sub 4"
+  ],
+  "observed_min": 0,
+  "observed_max": 21,
+  "observed_common": 0
+ },
+ {
+  "offset": 168,
+  "hex": "0xa8",
+  "name": "LFO 1 triggering (24=Freewheel, 25=Keysync)",
+  "sources": [
+   "packed NRPN data code"
+  ],
+  "observed_min": 24,
+  "observed_max": 25,
+  "observed_common": 25
+ },
+ {
+  "offset": 169,
+  "hex": "0xa9",
+  "name": "",
+  "sources": [],
+  "observed_min": 124,
+  "observed_max": 125,
+  "observed_common": 124
+ },
+ {
+  "offset": 170,
+  "hex": "0xaa",
+  "name": "LFO 2 Delay",
+  "sources": [
+   "CC 19 (0x13)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 10
+ },
+ {
+  "offset": 171,
+  "hex": "0xab",
+  "name": "LFO 2 waveform (20=square, 21=saw, 22=triangle, 23=s/h)",
+  "sources": [
+   "packed NRPN data code"
+  ],
+  "observed_min": 20,
+  "observed_max": 23,
+  "observed_common": 22
+ },
+ {
+  "offset": 172,
+  "hex": "0xac",
+  "name": "LFO 2 Offset",
+  "sources": [
+   "CC 83 (0x53)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 173,
+  "hex": "0xad",
+  "name": "LFO 2 Speed",
+  "sources": [
+   "CC 18 (0x12)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 35
+ },
+ {
+  "offset": 174,
+  "hex": "0xae",
+  "name": "LFO 2 Speed Env 3",
+  "sources": [
+   "CC 81 (0x51)",
+   "NRPN 1 (0x01) sub 7",
+   "NRPN 1 (0x01) sub 8"
+  ],
+  "observed_min": 0,
+  "observed_max": 96,
+  "observed_common": 64
+ },
+ {
+  "offset": 175,
+  "hex": "0xaf",
+  "name": "LFO 2 speed Wh depth",
+  "sources": [
+   "NRPN 104 (0x68)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 176,
+  "hex": "0xb0",
+  "name": "LFO 2 Speed Aftertouch depth",
+  "sources": [
+   "NRPN 86 (0x56)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 177,
+  "hex": "0xb1",
+  "name": "",
+  "sources": [
+   "NRPN 110 (0x6e) sub 8"
+  ],
+  "observed_min": 0,
+  "observed_max": 19,
+  "observed_common": 0
+ },
+ {
+  "offset": 178,
+  "hex": "0xb2",
+  "name": "LFO 2 triggering (26=Freewheel, 27=Keysync)",
+  "sources": [
+   "packed NRPN data code"
+  ],
+  "observed_min": 26,
+  "observed_max": 27,
+  "observed_common": 27
+ },
+ {
+  "offset": 179,
+  "hex": "0xb3",
+  "name": "",
+  "sources": [],
+  "observed_min": 126,
+  "observed_max": 127,
+  "observed_common": 126
+ },
+ {
+  "offset": 180,
+  "hex": "0xb4",
+  "name": "",
+  "sources": [],
+  "observed_min": 28,
+  "observed_max": 30,
+  "observed_common": 28
+ },
+ {
+  "offset": 181,
+  "hex": "0xb5",
+  "name": "",
+  "sources": [],
+  "observed_min": 31,
+  "observed_max": 33,
+  "observed_common": 31
+ },
+ {
+  "offset": 182,
+  "hex": "0xb6",
+  "name": "Env 3 Attack",
+  "sources": [
+   "CC 75 (0x4b)"
+  ],
+  "observed_min": 0,
+  "observed_max": 102,
+  "observed_common": 0
+ },
+ {
+  "offset": 183,
+  "hex": "0xb7",
+  "name": "Env 3 Decay",
+  "sources": [
+   "CC 76 (0x4c)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 184,
+  "hex": "0xb8",
+  "name": "Env 3 Sustain",
+  "sources": [
+   "CC 77 (0x4d)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 185,
+  "hex": "0xb9",
+  "name": "Env 3 Release",
+  "sources": [
+   "CC 78 (0x4e)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 186,
+  "hex": "0xba",
+  "name": "Env 3 Velocity",
+  "sources": [
+   "CC 79 (0x4f)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 104
+ },
+ {
+  "offset": 187,
+  "hex": "0xbb",
+  "name": "Env 3 Delay",
+  "sources": [
+   "CC 74 (0x4a)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 188,
+  "hex": "0xbc",
+  "name": "Env 2 Attack",
+  "sources": [
+   "CC 114 (0x72)"
+  ],
+  "observed_min": 0,
+  "observed_max": 98,
+  "observed_common": 0
+ },
+ {
+  "offset": 189,
+  "hex": "0xbd",
+  "name": "Env 2 Decay",
+  "sources": [
+   "CC 115 (0x73)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 190,
+  "hex": "0xbe",
+  "name": "Env 2 Sustain",
+  "sources": [
+   "CC 116 (0x74)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 191,
+  "hex": "0xbf",
+  "name": "Env 2 Release",
+  "sources": [
+   "CC 117 (0x75)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 192,
+  "hex": "0xc0",
+  "name": "Env 2 Velocity",
+  "sources": [
+   "CC 118 (0x76)"
+  ],
+  "observed_min": 44,
+  "observed_max": 127,
+  "observed_common": 104
+ },
+ {
+  "offset": 193,
+  "hex": "0xc1",
+  "name": "Env 2 Delay",
+  "sources": [
+   "CC 113 (0x71)"
+  ],
+  "observed_min": 0,
+  "observed_max": 108,
+  "observed_common": 0
+ },
+ {
+  "offset": 194,
+  "hex": "0xc2",
+  "name": "Env 1 Attack",
+  "sources": [
+   "CC 108 (0x6c)"
+  ],
+  "observed_min": 0,
+  "observed_max": 122,
+  "observed_common": 0
+ },
+ {
+  "offset": 195,
+  "hex": "0xc3",
+  "name": "Env 1 Decay",
+  "sources": [
+   "CC 109 (0x6d)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 196,
+  "hex": "0xc4",
+  "name": "Env 1 Sustain",
+  "sources": [
+   "CC 110 (0x6e)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 197,
+  "hex": "0xc5",
+  "name": "Env 1 Release",
+  "sources": [
+   "CC 111 (0x6f)"
+  ],
+  "observed_min": 0,
+  "observed_max": 116,
+  "observed_common": 8
+ },
+ {
+  "offset": 198,
+  "hex": "0xc6",
+  "name": "Env 1 Velocity",
+  "sources": [
+   "CC 112 (0x70)"
+  ],
+  "observed_min": 22,
+  "observed_max": 127,
+  "observed_common": 104
+ },
+ {
+  "offset": 199,
+  "hex": "0xc7",
+  "name": "Env 1 Wh",
+  "sources": [
+   "NRPN 105 (0x69)"
+  ],
+  "observed_min": 29,
+  "observed_max": 86,
+  "observed_common": 64
+ },
+ {
+  "offset": 200,
+  "hex": "0xc8",
+  "name": "Env 1 Aftertouch",
+  "sources": [
+   "NRPN 106 (0x6a)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 201,
+  "hex": "0xc9",
+  "name": "Noise Soften",
+  "sources": [
+   "CC 24 (0x18)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 202,
+  "hex": "0xca",
+  "name": "Noise Mod knob Wh hardness",
+  "sources": [
+   "NRPN 64 (0x40)"
+  ],
+  "observed_min": 0,
+  "observed_max": 64,
+  "observed_common": 0
+ },
+ {
+  "offset": 203,
+  "hex": "0xcb",
+  "name": "Noise Mod knob Env 2 hardness",
+  "sources": [
+   "NRPN 60 (0x3c)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 204,
+  "hex": "0xcc",
+  "name": "Noise Mod knob Env 3 hardness",
+  "sources": [
+   "NRPN 61 (0x3d)"
+  ],
+  "observed_min": 64,
+  "observed_max": 103,
+  "observed_common": 64
+ },
+ {
+  "offset": 205,
+  "hex": "0xcd",
+  "name": "Noise Mod knob LFO 1 hardness",
+  "sources": [
+   "NRPN 62 (0x3e)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 206,
+  "hex": "0xce",
+  "name": "Noise Mod knob LFO 2 hardness",
+  "sources": [
+   "NRPN 63 (0x3f)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 207,
+  "hex": "0xcf",
+  "name": "Filter type (3=Low, 4=Band, 5=High, 6=Res LPF, 7=Res BPF, 8=Res HPF, 9=Notch, 10=LPF+LPF, 11=BPF+BPF, 12=HPF+HPF, 13=LPF+BPF, 14=BPF+HPF)",
+  "sources": [
+   "NRPN 1 (0x01) sub 2",
+   "NRPN 1 (0x01) sub 30",
+   "packed NRPN data code"
+  ],
+  "observed_min": 3,
+  "observed_max": 13,
+  "observed_common": 3
+ },
+ {
+  "offset": 208,
+  "hex": "0xd0",
+  "name": "Filter slope (0=12dB, 1=18dB, 2=24dB)",
+  "sources": [
+   "NRPN 1 (0x01) sub 1",
+   "packed NRPN data code"
+  ],
+  "observed_min": 0,
+  "observed_max": 2,
+  "observed_common": 2
+ },
+ {
+  "offset": 209,
+  "hex": "0xd1",
+  "name": "",
+  "sources": [
+   "NRPN 1 (0x01) sub 14",
+   "NRPN 100 (0x64) sub 9",
+   "NRPN 100 (0x64) sub 14",
+   "NRPN 110 (0x6e) sub 7"
+  ],
+  "observed_min": 0,
+  "observed_max": 75,
+  "observed_common": 64
+ },
+ {
+  "offset": 210,
+  "hex": "0xd2",
+  "name": "Filter Overdrive",
+  "sources": [
+   "CC 104 (0x68)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 211,
+  "hex": "0xd3",
+  "name": "Filter Cutoff Freq",
+  "sources": [
+   "CC 105 (0x69)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 50
+ },
+ {
+  "offset": 212,
+  "hex": "0xd4",
+  "name": "Filter Mod knob Wh frequency",
+  "sources": [
+   "NRPN 87 (0x57)"
+  ],
+  "observed_min": 41,
+  "observed_max": 104,
+  "observed_common": 64
+ },
+ {
+  "offset": 213,
+  "hex": "0xd5",
+  "name": "Filter Aftertouch frequency",
+  "sources": [
+   "NRPN 93 (0x5d)"
+  ],
+  "observed_min": 0,
+  "observed_max": 67,
+  "observed_common": 64
+ },
+ {
+  "offset": 214,
+  "hex": "0xd6",
+  "name": "Filter Freq Env 2",
+  "sources": [
+   "CC 107 (0x6b)"
+  ],
+  "observed_min": 1,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 215,
+  "hex": "0xd7",
+  "name": "Filter Freq Env 3",
+  "sources": [
+   "CC 59 (0x3b)"
+  ],
+  "observed_min": 38,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 216,
+  "hex": "0xd8",
+  "name": "Filter Freq LFO 1",
+  "sources": [
+   "CC 60 (0x3c)"
+  ],
+  "observed_min": 64,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 217,
+  "hex": "0xd9",
+  "name": "Filter Freq LFO 2",
+  "sources": [
+   "CC 35 (0x23)"
+  ],
+  "observed_min": 49,
+  "observed_max": 94,
+  "observed_common": 64
+ },
+ {
+  "offset": 218,
+  "hex": "0xda",
+  "name": "Filter frequency Wh LFO 2 intensity",
+  "sources": [
+   "NRPN 89 (0x59)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 219,
+  "hex": "0xdb",
+  "name": "Filter frequency Aftertouch LFO 2 intensity",
+  "sources": [
+   "NRPN 91 (0x5b)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 220,
+  "hex": "0xdc",
+  "name": "Filter Tracking",
+  "sources": [
+   "CC 34 (0x22)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 221,
+  "hex": "0xdd",
+  "name": "Filter Resonance",
+  "sources": [
+   "CC 106 (0x6a)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 222,
+  "hex": "0xde",
+  "name": "Filter Mod knob Wh resonance",
+  "sources": [
+   "NRPN 88 (0x58)"
+  ],
+  "observed_min": 28,
+  "observed_max": 89,
+  "observed_common": 64
+ },
+ {
+  "offset": 223,
+  "hex": "0xdf",
+  "name": "Filter Aftertouch resonance",
+  "sources": [
+   "NRPN 94 (0x5e)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 224,
+  "hex": "0xe0",
+  "name": "Filter Res Env 2",
+  "sources": [
+   "CC 72 (0x48)"
+  ],
+  "observed_min": 19,
+  "observed_max": 101,
+  "observed_common": 64
+ },
+ {
+  "offset": 225,
+  "hex": "0xe1",
+  "name": "Filter Res Env 3",
+  "sources": [
+   "CC 85 (0x55)"
+  ],
+  "observed_min": 19,
+  "observed_max": 82,
+  "observed_common": 64
+ },
+ {
+  "offset": 226,
+  "hex": "0xe2",
+  "name": "Filter Res LFO 1",
+  "sources": [
+   "CC 73 (0x49)"
+  ],
+  "observed_min": 43,
+  "observed_max": 84,
+  "observed_common": 64
+ },
+ {
+  "offset": 227,
+  "hex": "0xe3",
+  "name": "Filter Res LFO 2",
+  "sources": [
+   "CC 86 (0x56)"
+  ],
+  "observed_min": 28,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 228,
+  "hex": "0xe4",
+  "name": "Filter resonance Wh LFO 2 intensity",
+  "sources": [
+   "NRPN 90 (0x5a)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 229,
+  "hex": "0xe5",
+  "name": "Filter resonance Aftertouch LFO 2 intensity",
+  "sources": [
+   "NRPN 92 (0x5c)"
+  ],
+  "observed_min": 64,
+  "observed_max": 64,
+  "observed_common": 64
+ },
+ {
+  "offset": 230,
+  "hex": "0xe6",
+  "name": "Filter Q normalise",
+  "sources": [
+   "NRPN 127 (0x7f)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 231,
+  "hex": "0xe7",
+  "name": "Portamento Time",
+  "sources": [
+   "CC 5 (0x05)"
+  ],
+  "observed_min": 0,
+  "observed_max": 77,
+  "observed_common": 0
+ },
+ {
+  "offset": 232,
+  "hex": "0xe8",
+  "name": "Glide type (42=Normal, 43=Auto, then +-2/5/7/12 semitones)",
+  "sources": [
+   "NRPN 1 (0x01) sub 10",
+   "packed NRPN data code"
+  ],
+  "observed_min": 42,
+  "observed_max": 51,
+  "observed_common": 43
+ },
+ {
+  "offset": 233,
+  "hex": "0xe9",
+  "name": "",
+  "sources": [
+   "NRPN 0 (0x00) sub 10"
+  ],
+  "observed_min": 120,
+  "observed_max": 120,
+  "observed_common": 120
+ },
+ {
+  "offset": 234,
+  "hex": "0xea",
+  "name": "",
+  "sources": [
+   "NRPN 0 (0x00) sub 11"
+  ],
+  "observed_min": 123,
+  "observed_max": 123,
+  "observed_common": 123
+ },
+ {
+  "offset": 235,
+  "hex": "0xeb",
+  "name": "",
+  "sources": [
+   "NRPN 1 (0x01) sub 9"
+  ],
+  "observed_min": 34,
+  "observed_max": 41,
+  "observed_common": 34
+ },
+ {
+  "offset": 236,
+  "hex": "0xec",
+  "name": "",
+  "sources": [],
+  "observed_min": 26,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 237,
+  "hex": "0xed",
+  "name": "",
+  "sources": [
+   "NRPN 84 (0x54) sub 6",
+   "NRPN 84 (0x54) sub 7",
+   "NRPN 100 (0x64) sub 5"
+  ],
+  "observed_min": 32,
+  "observed_max": 35,
+  "observed_common": 32
+ },
+ {
+  "offset": 238,
+  "hex": "0xee",
+  "name": "",
+  "sources": [
+   "NRPN 100 (0x64) sub 6",
+   "NRPN 100 (0x64) sub 7"
+  ],
+  "observed_min": 65,
+  "observed_max": 66,
+  "observed_common": 66
+ },
+ {
+  "offset": 239,
+  "hex": "0xef",
+  "name": "",
+  "sources": [],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 240,
+  "hex": "0xf0",
+  "name": "Arp pattern bank (76=Mono, 77=Poly, 78=User)",
+  "sources": [
+   "NRPN 1 (0x01) sub 17",
+   "packed NRPN data code"
+  ],
+  "observed_min": 76,
+  "observed_max": 78,
+  "observed_common": 76
+ },
+ {
+  "offset": 241,
+  "hex": "0xf1",
+  "name": "Arp Pattern Select",
+  "sources": [
+   "CC 3 (0x03)"
+  ],
+  "observed_min": 0,
+  "observed_max": 115,
+  "observed_common": 0
+ },
+ {
+  "offset": 242,
+  "hex": "0xf2",
+  "name": "Arp velocity (86=Played, 87=Full, 88=Half, 89=Programmed)",
+  "sources": [
+   "NRPN 1 (0x01) sub 20",
+   "packed NRPN data code"
+  ],
+  "observed_min": 86,
+  "observed_max": 89,
+  "observed_common": 89
+ },
+ {
+  "offset": 243,
+  "hex": "0xf3",
+  "name": "Arp keysync (74=On, 75=Off)",
+  "sources": [
+   "NRPN 1 (0x01) sub 16",
+   "packed NRPN data code"
+  ],
+  "observed_min": 74,
+  "observed_max": 75,
+  "observed_common": 74
+ },
+ {
+  "offset": 244,
+  "hex": "0xf4",
+  "name": "Arp setting 122..127 (probably octave range; unverified)",
+  "sources": [
+   "NRPN 1 (0x01) sub 29",
+   "packed NRPN data code"
+  ],
+  "observed_min": 122,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 245,
+  "hex": "0xf5",
+  "name": "Arp quantize (81=Off, 82..85=Mode 1..4)",
+  "sources": [
+   "NRPN 1 (0x01) sub 19",
+   "packed NRPN data code"
+  ],
+  "observed_min": 81,
+  "observed_max": 85,
+  "observed_common": 81
+ },
+ {
+  "offset": 246,
+  "hex": "0xf6",
+  "name": "Multi purpose packed NRPN",
+  "sources": [
+   "NRPN 109 (0x6d)"
+  ],
+  "observed_min": 1,
+  "observed_max": 3,
+  "observed_common": 1
+ },
+ {
+  "offset": 247,
+  "hex": "0xf7",
+  "name": "Arp latch (CC 65: 0=off, 1=latched)",
+  "sources": [
+   "CC 65 (0x41)",
+   "packed NRPN data code"
+  ],
+  "observed_min": 0,
+  "observed_max": 1,
+  "observed_common": 0
+ },
+ {
+  "offset": 248,
+  "hex": "0xf8",
+  "name": "Arp latch type (79=Constant, 80=Pattern)",
+  "sources": [
+   "NRPN 1 (0x01) sub 18",
+   "packed NRPN data code"
+  ],
+  "observed_min": 79,
+  "observed_max": 79,
+  "observed_common": 79
+ },
+ {
+  "offset": 249,
+  "hex": "0xf9",
+  "name": "Arp flags (bit0 = mute On; others unknown, usually 4)",
+  "sources": [
+   "NRPN 1 (0x01) sub 21",
+   "NRPN 1 (0x01) sub 25",
+   "packed NRPN data code"
+  ],
+  "observed_min": 4,
+  "observed_max": 4,
+  "observed_common": 4
+ },
+ {
+  "offset": 250,
+  "hex": "0xfa",
+  "name": "Arpeggiator on/off (72=On, 73=Off)",
+  "sources": [
+   "NRPN 1 (0x01) sub 15",
+   "packed NRPN data code"
+  ],
+  "observed_min": 72,
+  "observed_max": 73,
+  "observed_common": 73
+ },
+ {
+  "offset": 251,
+  "hex": "0xfb",
+  "name": "Arp realtime transpose (92=On, 93=Off)",
+  "sources": [
+   "NRPN 1 (0x01) sub 22",
+   "packed NRPN data code"
+  ],
+  "observed_min": 92,
+  "observed_max": 93,
+  "observed_common": 93
+ },
+ {
+  "offset": 252,
+  "hex": "0xfc",
+  "name": "",
+  "sources": [
+   "NRPN 110 (0x6e) sub 1"
+  ],
+  "observed_min": 1,
+  "observed_max": 19,
+  "observed_common": 4
+ },
+ {
+  "offset": 253,
+  "hex": "0xfd",
+  "name": "",
+  "sources": [],
+  "observed_min": 0,
+  "observed_max": 3,
+  "observed_common": 2
+ },
+ {
+  "offset": 254,
+  "hex": "0xfe",
+  "name": "Distortion Level (CC 90)",
+  "sources": [
+   "packed NRPN data code"
+  ],
+  "observed_min": 0,
+  "observed_max": 112,
+  "observed_common": 0
+ },
+ {
+  "offset": 255,
+  "hex": "0xff",
+  "name": "Distortion Mod Wheel Depth",
+  "sources": [
+   "CC 58 (0x3a)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 256,
+  "hex": "0x100",
+  "name": "EQ bass",
+  "sources": [
+   "NRPN 108 (0x6c)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 257,
+  "hex": "0x101",
+  "name": "EQ treble",
+  "sources": [
+   "NRPN 107 (0x6b)"
+  ],
+  "observed_min": 42,
+  "observed_max": 118,
+  "observed_common": 64
+ },
+ {
+  "offset": 258,
+  "hex": "0x102",
+  "name": "Comb filter frequency",
+  "sources": [
+   "NRPN 95 (0x5f)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 259,
+  "hex": "0x103",
+  "name": "Comb filter boost",
+  "sources": [
+   "NRPN 96 (0x60)"
+  ],
+  "observed_min": 15,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 260,
+  "hex": "0x104",
+  "name": "Effects dry level",
+  "sources": [
+   "NRPN 97 (0x61)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 261,
+  "hex": "0x105",
+  "name": "Pan",
+  "sources": [
+   "CC 10 (0x0a)"
+  ],
+  "observed_min": 61,
+  "observed_max": 69,
+  "observed_common": 64
+ },
+ {
+  "offset": 262,
+  "hex": "0x106",
+  "name": "Panning speed",
+  "sources": [
+   "NRPN 98 (0x62)"
+  ],
+  "observed_min": 12,
+  "observed_max": 127,
+  "observed_common": 34
+ },
+ {
+  "offset": 263,
+  "hex": "0x107",
+  "name": "Panning depth",
+  "sources": [
+   "NRPN 99 (0x63)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 264,
+  "hex": "0x108",
+  "name": "",
+  "sources": [
+   "NRPN 1 (0x01) sub 12"
+  ],
+  "observed_min": 55,
+  "observed_max": 58,
+  "observed_common": 55
+ },
+ {
+  "offset": 265,
+  "hex": "0x109",
+  "name": "Reverb Send Level",
+  "sources": [
+   "CC 91 (0x5b)"
+  ],
+  "observed_min": 0,
+  "observed_max": 101,
+  "observed_common": 0
+ },
+ {
+  "offset": 266,
+  "hex": "0x10a",
+  "name": "Reverb Mod Wheel Depth",
+  "sources": [
+   "CC 84 (0x54)"
+  ],
+  "observed_min": 0,
+  "observed_max": 91,
+  "observed_common": 64
+ },
+ {
+  "offset": 267,
+  "hex": "0x10b",
+  "name": "Reverb Decay",
+  "sources": [
+   "CC 95 (0x5f)"
+  ],
+  "observed_min": 0,
+  "observed_max": 97,
+  "observed_common": 86
+ },
+ {
+  "offset": 268,
+  "hex": "0x10c",
+  "name": "Reverb HF Damp",
+  "sources": [
+   "CC 96 (0x60)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 18
+ },
+ {
+  "offset": 269,
+  "hex": "0x10d",
+  "name": "Reverb Type / Early Ref Level [**]",
+  "sources": [
+   "CC 100 (0x64)"
+  ],
+  "observed_min": 0,
+  "observed_max": 111,
+  "observed_common": 78
+ },
+ {
+  "offset": 270,
+  "hex": "0x10e",
+  "name": "Chorus Send Level",
+  "sources": [
+   "CC 93 (0x5d)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 271,
+  "hex": "0x10f",
+  "name": "Chorus Mod Wheel Depth",
+  "sources": [
+   "CC 94 (0x5e)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 272,
+  "hex": "0x110",
+  "name": "Chorus Speed",
+  "sources": [
+   "CC 87 (0x57)"
+  ],
+  "observed_min": 5,
+  "observed_max": 50,
+  "observed_common": 30
+ },
+ {
+  "offset": 273,
+  "hex": "0x111",
+  "name": "Chorus Mod Depth",
+  "sources": [
+   "CC 88 (0x58)"
+  ],
+  "observed_min": 8,
+  "observed_max": 127,
+  "observed_common": 33
+ },
+ {
+  "offset": 274,
+  "hex": "0x112",
+  "name": "Chorus Feedback",
+  "sources": [
+   "CC 89 (0x59)"
+  ],
+  "observed_min": 20,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 275,
+  "hex": "0x113",
+  "name": "",
+  "sources": [
+   "NRPN 1 (0x01) sub 11",
+   "NRPN 100 (0x64) sub 13"
+  ],
+  "observed_min": 36,
+  "observed_max": 38,
+  "observed_common": 36
+ },
+ {
+  "offset": 276,
+  "hex": "0x114",
+  "name": "Delay Send Level",
+  "sources": [
+   "CC 92 (0x5c)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ },
+ {
+  "offset": 277,
+  "hex": "0x115",
+  "name": "Delay Mod Wheel Depth",
+  "sources": [
+   "CC 119 (0x77)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 64
+ },
+ {
+  "offset": 278,
+  "hex": "0x116",
+  "name": "Delay Time",
+  "sources": [
+   "CC 101 (0x65)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 279,
+  "hex": "0x117",
+  "name": "Delay Feedback",
+  "sources": [
+   "CC 102 (0x66)"
+  ],
+  "observed_min": 0,
+  "observed_max": 84,
+  "observed_common": 50
+ },
+ {
+  "offset": 280,
+  "hex": "0x118",
+  "name": "Delay HF Damp",
+  "sources": [
+   "CC 103 (0x67)"
+  ],
+  "observed_min": 0,
+  "observed_max": 20,
+  "observed_common": 20
+ },
+ {
+  "offset": 281,
+  "hex": "0x119",
+  "name": "",
+  "sources": [],
+  "observed_min": 96,
+  "observed_max": 101,
+  "observed_common": 98
+ },
+ {
+  "offset": 282,
+  "hex": "0x11a",
+  "name": "Delay width",
+  "sources": [
+   "NRPN 101 (0x65)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 127
+ },
+ {
+  "offset": 283,
+  "hex": "0x11b",
+  "name": "",
+  "sources": [
+   "NRPN 100 (0x64) sub 1"
+  ],
+  "observed_min": 0,
+  "observed_max": 16,
+  "observed_common": 0
+ },
+ {
+  "offset": 284,
+  "hex": "0x11c",
+  "name": "",
+  "sources": [],
+  "observed_min": 0,
+  "observed_max": 12,
+  "observed_common": 0
+ },
+ {
+  "offset": 285,
+  "hex": "0x11d",
+  "name": "Effects Confg Morph Amount",
+  "sources": [
+   "CC 8 (0x08)"
+  ],
+  "observed_min": 0,
+  "observed_max": 127,
+  "observed_common": 0
+ }
+]
