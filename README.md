@@ -30,6 +30,13 @@ Written in Rust with egui.
 - **Performance sets** for multitimbral use: give each of 42 performances (A000-A041) its own six
   programs in banks C/D, fill A001-A041 from A000, export or send the whole set.
 - **Unlock banks C/D** (the firmware's hidden memory-expansion switch), with a confirmation.
+- **Step sequencer** (the **seq** button): 8 tracks on MIDI channels 1-8, laid out like a
+  Launchpad. 32 projects, each with 16 patterns of up to 64 steps (a pattern holds all 8 tracks);
+  chords of up to 8 notes, velocity, gate and probability per step, swing, per-track step rate and
+  transpose, live and step recording from a MIDI keyboard, tap tempo and optional MIDI clock out.
+  It plays through the editor's MIDI output and keeps playing while you edit sounds on the panel.
+  Projects are saved automatically. A **Launchpad Pro MK3** connected over USB is picked up and
+  used as the sequencer's controller (it is put into Programmer mode).
 
 ## Download
 

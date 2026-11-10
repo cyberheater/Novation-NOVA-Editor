@@ -8,6 +8,7 @@ mod menus;
 mod mirror;
 mod midi;
 mod panel;
+mod seq;
 mod params;
 mod perf;
 mod slots;
@@ -66,6 +67,8 @@ pub struct App {
     /// library changed (since) and not yet saved to the iPad's library file
     lib_dirty: Option<std::time::Instant>,
     show_list: bool,
+    show_seq: bool,
+    seq: seq::Seq,
     midi_manual_off: bool,
     midi_check: std::time::Instant,
     show_dump: bool,
@@ -232,6 +235,8 @@ impl App {
             show_midi: false,
             lib_dirty: None,
             show_list: false,
+            show_seq: false,
+            seq: seq::Seq::new(),
             midi_manual_off: false,
             midi_check: std::time::Instant::now() - std::time::Duration::from_secs(10),
             show_dump: false,
@@ -1761,6 +1766,7 @@ impl App {
             perf,
             midi: self.show_midi,
             list: self.show_list,
+            seq: self.seq.is_playing(),
             midi_ok: self.midi.conn_in.is_some() && self.midi.has_output(),
             dump: self.show_dump,
         };
@@ -1803,6 +1809,7 @@ impl App {
         match out.action {
             Some("midi") => self.open_midi_window(),
             Some("dump") => self.show_dump = true,
+            Some("seq") => self.show_seq = true,
             Some("list") => {
                 self.show_list = !self.show_list;
                 self.scroll_to_sel = true;
@@ -2750,6 +2757,7 @@ impl eframe::App for App {
             self.handle_rx(m);
         }
         for m in self.midi.poll_channel() {
+            self.seq.midi_in(m.status, m.d1, m.d2);
             self.mirror_msg(m);
         }
         if self.live_on {
@@ -2792,7 +2800,9 @@ impl eframe::App for App {
 
         let mut clicked: Option<usize> = None;
         let perf_mode = self.is_perf();
-        if self.show_list {
+        self.seq.set_out(self.midi.out_handle());
+        self.seq.tick(&ctx);
+        if self.show_list && !self.show_seq {
         egui::Panel::left("list").default_size(240.0).show(ui, |ui| {
             ui.horizontal(|ui| {
                 ui.strong(if perf_mode { "Performances" } else { "Programs" });
@@ -2835,7 +2845,15 @@ impl eframe::App for App {
             if perf_mode { self.select_perf(i) } else { self.select(i) }
         }
 
-        egui::CentralPanel::default().show(ui, |ui| self.panel_view(ui));
+        if self.show_seq {
+            let out = self.midi.conn_out.clone();
+            let back = egui::CentralPanel::default().show(ui, |ui| self.seq.ui(ui, out.as_deref())).inner;
+            if back {
+                self.show_seq = false;
+            }
+        } else {
+            egui::CentralPanel::default().show(ui, |ui| self.panel_view(ui));
+        }
 
         self.sync_embedded();
         self.ports_cfg.mirror_on = self.mirror_on;

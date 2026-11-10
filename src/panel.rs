@@ -146,7 +146,7 @@ pub fn buttons() -> Vec<Bt> {
     use Kind::*;
     vec![
         b("perf", 170.0, 206.0, "perf"), b("prog", 252.0, 206.0, "prog"), b("write", 488.0, 206.0, "write"),
-        b("midi", 1580.0, 70.0, "midi"), b("dump", 1580.0, 140.0, "dump"), b("list", 1580.0, 210.0, "list"),
+        b("midi", 1580.0, 56.0, "midi"), b("dump", 1580.0, 116.0, "dump"), b("list", 1580.0, 176.0, "list"), b("seq", 1580.0, 236.0, "seq"),
         b("pageU", 590.0, 135.0, "page \u{25b2}"), b("pageD", 590.0, 190.0, "page \u{25bc}"),
         b("bankU", 1370.0, 78.0, "bank \u{25b2}"), b("bankD", 1370.0, 132.0, "bank \u{25bc}"),
         b("progU", 1370.0, 186.0, "prog \u{25b2}"), b("progD", 1370.0, 240.0, "prog \u{25bc}"),
@@ -414,6 +414,8 @@ pub struct Flags {
     pub perf: bool,
     pub midi: bool,
     pub list: bool,
+    /// sequencer playing (seq button lit)
+    pub seq: bool,
     /// MIDI input and output both connected (green lamp)
     pub midi_ok: bool,
     pub dump: bool,
@@ -429,13 +431,14 @@ pub struct Flags {
     pub muted: u8,
 }
 
-pub const ACTIONS: &[&str] = &["write", "midi", "dump", "list", "prog", "perf", "pageU", "pageD", "x_menu", "x_copy", "a_menu", "o_menu", "f_menu", "l_menu", "e_menu", "e_trig"];
+pub const ACTIONS: &[&str] = &["write", "midi", "dump", "list", "seq", "prog", "perf", "pageU", "pageD", "x_menu", "x_copy", "a_menu", "o_menu", "f_menu", "l_menu", "e_menu", "e_trig"];
 
 fn action_text(id: &str) -> Option<&'static str> {
     Some(match id {
         "write" => "write: exports this program as a type-2 .syx file (same as Export .syx).",
         "midi" => "midi: opens the MIDI connection window (ports, test, live edit, mirror).",
         "list" => "list: shows or hides the program / performance list on the left.",
+        "seq" => "seq: the 8-track step sequencer (Launchpad layout). It keeps playing when you come back here.",
         "dump" => "dump: retrieve from / send to the Nova, and save or load files on this computer.",
         "prog" => "prog: switch to Program mode (and scroll the list to the current program).",
         "o_menu" => "oscillator menu: opens a window with all parameters of the selected oscillator.",
@@ -966,13 +969,14 @@ pub fn draw(
                 } else if bt.id == "x_copy" {
                     live = flags.perf;
                     on = flags.copy_mode;
-                } else if ["prog", "perf", "midi", "dump", "list"].contains(&bt.id) {
+                } else if ["prog", "perf", "midi", "dump", "list", "seq"].contains(&bt.id) {
                     live = true;
                     on = match bt.id {
                         "prog" => flags.prog,
                         "midi" => flags.midi,
                         "dump" => flags.dump,
                         "list" => flags.list,
+                        "seq" => flags.seq,
                         _ => flags.perf,
                     };
                 } else if let Some(a) = assign.get(bt.id) {
@@ -989,7 +993,7 @@ pub fn draw(
     }
     // MIDI link lamp beside the midi button: green = input and output connected, red = not
     {
-        let c = pt(1624.0, 70.0);
+        let c = pt(1624.0, 56.0);
         let rad = 7.0 * scale;
         let (core, glow) = if flags.midi_ok {
             (Color32::from_rgb(0x39, 0xe0, 0x6a), Color32::from_rgba_unmultiplied(60, 255, 110, 60))

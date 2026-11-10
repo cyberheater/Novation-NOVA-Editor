@@ -267,6 +267,11 @@ impl Midi {
         scan
     }
 
+    /// The output connection, shared with the sequencer thread.
+    pub fn out_handle(&self) -> Option<Arc<Mutex<MidiOutputConnection>>> {
+        self.out_conn.clone()
+    }
+
     pub fn has_output(&self) -> bool {
         self.out_conn.is_some()
     }
@@ -296,15 +301,19 @@ impl Midi {
                     break;
                 }
                 let mut r = Ok(());
-                for chunk in m.chunks(SEND_CHUNK) {
-                    if cancel.load(Ordering::SeqCst) {
-                        break;
+                {
+                    // hold the port for the whole message: a sequencer note in the middle would break the SysEx
+                    let mut c = conn.lock().unwrap_or_else(|e| e.into_inner());
+                    for chunk in m.chunks(SEND_CHUNK) {
+                        if cancel.load(Ordering::SeqCst) {
+                            break;
+                        }
+                        r = c.send(chunk).map_err(|e| e.to_string());
+                        if r.is_err() {
+                            break;
+                        }
+                        std::thread::sleep(std::time::Duration::from_millis(SEND_CHUNK_MS));
                     }
-                    r = conn.lock().map_err(|e| e.to_string()).and_then(|mut c| c.send(chunk).map_err(|e| e.to_string()));
-                    if r.is_err() {
-                        break;
-                    }
-                    std::thread::sleep(std::time::Duration::from_millis(SEND_CHUNK_MS));
                 }
                 if let Err(e) = r {
                     *error.lock().unwrap() = Some(e);
