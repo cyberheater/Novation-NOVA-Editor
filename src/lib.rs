@@ -63,6 +63,8 @@ pub struct App {
     sel_in: Option<usize>,
     sel_out: Option<usize>,
     show_midi: bool,
+    /// library changed (since) and not yet saved to the iPad's library file
+    lib_dirty: Option<std::time::Instant>,
     show_list: bool,
     midi_manual_off: bool,
     midi_check: std::time::Instant,
@@ -228,6 +230,7 @@ impl App {
             sel_in: None,
             sel_out: None,
             show_midi: false,
+            lib_dirty: None,
             show_list: false,
             midi_manual_off: false,
             midi_check: std::time::Instant::now() - std::time::Duration::from_secs(10),
@@ -331,7 +334,9 @@ impl App {
             app.select(0);
             app.status = (format!("Loaded {} factory programs", app.programs.len()), Some(true));
         }
-        let files: Vec<PathBuf> = if cli.is_empty() {
+        let files: Vec<PathBuf> = if let Some(lib) = files::library_path().filter(|p| p.exists()) {
+            vec![lib]
+        } else if cli.is_empty() {
             load_recent().into_iter().filter(|p| p.exists()).collect()
         } else {
             cli.iter().map(|p| absolute(p)).collect()
@@ -439,9 +444,13 @@ impl App {
         self.perf_stash = None;
         self.perf_cur = Some(i);
         self.scroll_to_sel = true;
-        // auto-select Part 1 so the strip and LCD are populated (does not edit the performance)
-        let part = self.pstate.part.unwrap_or(0);
-        self.select_part(part);
+        // as on the Nova: a newly chosen performance shows the performance itself (Part buttons dark,
+        // Bank/Prog step performances); Part 1's program is loaded so the panel has something to show
+        self.select_part(0);
+        self.pstate.part = None;
+        let id = self.perf_id_label(self.perf_bank, self.perf_idx, self.perf_bundle.is_some());
+        let name = prog_name(&self.perf_body).trim().to_string();
+        self.set_status(format!("Performance {id} {name}. Press a Part button to edit that Part."), Some(true));
     }
 
     /// (id text, program name) of the program used by a part: embedded in a bundle, else looked up.
@@ -460,7 +469,26 @@ impl App {
 
     /// Select a part (as the Part button does): load its program and report it.
     /// Put `body` into program slot (bank, idx) of the app's list and remember it for export.
+    /// iPadOS: write the library to its file a few seconds after the last change.
+    fn library_tick(&mut self) {
+        let Some(path) = files::library_path() else { return };
+        let Some(t) = self.lib_dirty else { return };
+        if t.elapsed() < std::time::Duration::from_secs(3) {
+            return;
+        }
+        self.lib_dirty = None;
+        let mut msgs = self.lib_program_msgs(None);
+        msgs.extend(self.lib_perf_msgs());
+        if !msgs.is_empty() {
+            if let Some(dir) = path.parent() {
+                let _ = std::fs::create_dir_all(dir);
+            }
+            let _ = std::fs::write(&path, msgs.concat());
+        }
+    }
+
     fn store_program(&mut self, bank: u8, idx: u8, body: Vec<u8>) {
+        self.lib_dirty = Some(std::time::Instant::now());
         match self.find_program(bank, idx) {
             Some(i) => self.programs[i].body = body,
             None => {
@@ -661,7 +689,7 @@ impl App {
     }
 
     fn perf_id_label(&self, perf_bank: u8, idx: u8, bundle: bool) -> String {
-        if bundle { "Nova buffer".into() } else { perf::perf_id(perf_bank, idx) }
+        if bundle { "buf".into() } else { perf::perf_id(perf_bank, idx) }
     }
 
     /// Effects live in the performance part block when "Effects used" = Part.
@@ -716,8 +744,11 @@ impl App {
         }
     }
 
+    /// The two 16-character display lines, laid out like the Nova: name on top, "Prog A000" /
+    /// "Perf A000" right-aligned underneath. A selected Part shows its program, as on the hardware.
     fn lcd_lines(&self) -> (String, String) {
-        let l1 = |b: &[u8]| prog_name(b);
+        let top = |b: &[u8]| prog_name(b).chars().take(16).collect::<String>();
+        let right = |t: String| format!("{:>16}", t);
         match self.mode {
             Mode::Program => {
                 let id = self
@@ -726,18 +757,19 @@ impl App {
                         let p = &self.programs[c];
                         p.bank.map(|b| perf::prog_id(b, p.idx)).unwrap_or(format!("{:03}", p.idx))
                     })
-                    .unwrap_or("-".into());
-                let cat = CATS.get(self.prog[0x11] as usize).copied().unwrap_or("");
-                (l1(&self.prog), format!("  Prog {id}  {cat}").chars().take(40).collect())
+                    .unwrap_or("----".into());
+                (top(&self.prog), right(format!("Prog {id}")))
             }
             Mode::Performance => match self.pstate.part {
                 Some(part) => {
-                    let (id, nm) = self.part_prog_info(part);
-                    let nm = format!("{:<16}", nm);
-                    let muted = if part < 6 && self.display_muted() & (1 << part) != 0 { " (Muted)" } else { "" };
-                    (nm, format!("  Prog {id}{muted}"))
+                    let b = perf::part_off(part);
+                    let id = perf::prog_id(self.perf_body[b + perf::rel::PROG_BANK], self.perf_body[b + perf::rel::PROG_NUM]);
+                    let (_, nm) = self.part_prog_info(part);
+                    let muted = part < 6 && self.display_muted() & (1 << part) != 0;
+                    let l2 = if muted { format!("Muted  Prog {id}") } else { format!("Prog {id}") };
+                    (nm.chars().take(16).collect(), right(l2))
                 }
-                None => (l1(&self.perf_body), format!("  Perf {}", self.perf_id_label(self.perf_bank, self.perf_idx, self.perf_bundle.is_some()))),
+                None => (top(&self.perf_body), right(format!("Perf {}", self.perf_id_label(self.perf_bank, self.perf_idx, self.perf_bundle.is_some())))),
             },
         }
     }
@@ -754,7 +786,54 @@ impl App {
         self.scroll_to_sel = true;
     }
 
+    /// Perf mode with a Part selected: Prog up/down steps the Part's program by one, Bank up/down
+    /// (d = +-128) keeps the number and changes the bank (manual: "Editing Performances").
+    /// The Nova follows through Bank Select + Program Change on the Part's MIDI channel.
+    fn step_part_program(&mut self, part: usize, d: i32) {
+        let b = perf::part_off(part);
+        let (bank, num) = (self.perf_body[b + perf::rel::PROG_BANK], self.perf_body[b + perf::rel::PROG_NUM]);
+        let max_bank: u8 = if self.programs.iter().any(|p| p.bank.is_some_and(|b| b >= 7)) { 8 } else { 6 };
+        let (nb, nn) = if d.abs() >= 128 {
+            ((bank as i32 + d.signum()).clamp(5, max_bank as i32) as u8, num)
+        } else {
+            let lin = ((bank.clamp(5, max_bank) as i32 - 5) * 128 + num as i32 + d).clamp(0, (max_bank as i32 - 5) * 128 + 127);
+            ((5 + lin / 128) as u8, (lin % 128) as u8)
+        };
+        if (nb, nn) == (bank, num) {
+            return;
+        }
+        self.perf_body[b + perf::rel::PROG_BANK] = nb;
+        self.perf_body[b + perf::rel::PROG_NUM] = nn;
+        let body = self.find_program(nb, nn).map(|i| self.programs[i].body.clone());
+        if let (Some(bundle), Some(body)) = (self.perf_bundle.as_mut(), body.clone()) {
+            if let Some(slot) = bundle.parts.get_mut(part) {
+                *slot = Some(body);
+            }
+        }
+        self.load_part_program(part);
+        let name = body.as_deref().map(prog_name).map(|n| n.trim().to_string()).unwrap_or_else(|| "(not in the list)".into());
+        let mut note = String::new();
+        if self.live_on {
+            let global = self.globals.as_ref().map(|g| g.body[0] & 0x0f).unwrap_or(self.send_chan);
+            let ch = match self.perf_body[b + perf::rel::CHAN] {
+                c if c < 16 => c,
+                _ => global,
+            };
+            let ok = self.midi.send(&[0xb0 | ch, 32, nb]).is_ok() && self.midi.send(&[0xc0 | ch, nn]).is_ok();
+            if ok {
+                self.live_sent += 2;
+                self.live_push_log(format!("ch {}: Part {} bank {nb}, program change {nn}", ch + 1, part + 1));
+                note = format!(" (sent on MIDI channel {})", ch + 1);
+            }
+        }
+        self.set_status(format!("Part {}: {} {name}{note}", part + 1, perf::prog_id(nb, nn)), Some(true));
+    }
+
     fn step_prog(&mut self, d: i32) {
+        if let Some(part) = self.pstate.part.filter(|p| self.is_perf() && *p < perf::PARTS) {
+            self.step_part_program(part, d);
+            return;
+        }
         if self.is_perf() {
             let n = self.perfs.len() as i32;
             let c = self.perf_cur.map(|c| c as i32).unwrap_or(0);
@@ -812,6 +891,7 @@ impl App {
         }
         if !good.is_empty() {
             save_recent(&good);
+            self.lib_dirty = Some(std::time::Instant::now());
         }
         self.set_status(msgs.join("; "), Some(ok));
     }
@@ -850,6 +930,7 @@ impl App {
     /// Reload the embedded factory data and forget the remembered files.
     fn use_factory(&mut self) {
         let (progs, perfs) = sysex::parse_all(TOTAL_MID);
+        self.lib_dirty = Some(std::time::Instant::now());
         self.programs = progs;
         self.perfs = perfs;
         self.perf_cur = None;
@@ -927,6 +1008,7 @@ impl App {
                     None => self.programs.push(p),
                 }
                 self.rx_prog_n += 1;
+                self.lib_dirty = Some(std::time::Instant::now());
                 if bank >= 7 && !self.saved_slots.contains(&(bank, p_idx)) {
                     self.saved_slots.push((bank, p_idx));
                 }
@@ -941,6 +1023,7 @@ impl App {
                     None => self.perfs.push(p),
                 }
                 self.rx_perf_n += 1;
+                self.lib_dirty = Some(std::time::Instant::now());
                 self.dump_progress(false);
                 self.set_status(format!("Collected {} programs, {} performances", self.rx_prog_n, self.rx_perf_n), Some(true));
                 true
@@ -1091,6 +1174,8 @@ impl App {
                     self.set_status("Received a program dump from the Nova", Some(true));
                 }
             }
+            // the Nova's own extra messages (e.g. type 0x15 sent with its global settings) need no notice
+            None if msg.len() > 7 && msg[1..6] == [0x00, 0x20, 0x29, 0x01, 0x21] => {}
             None => self.set_status(format!("Received SysEx ({} bytes), not a program dump", msg.len()), None),
         }
     }
@@ -1722,7 +1807,15 @@ impl App {
                 self.show_list = !self.show_list;
                 self.scroll_to_sel = true;
             }
-            Some("perf") => self.set_mode(Mode::Performance),
+            Some("perf") => {
+                if self.is_perf() {
+                    // as on the Nova: back to the performance itself; Bank/Prog then select performances
+                    self.pstate.part = None;
+                    self.set_status("Performance view: Bank/Prog select performances. Press a Part button to change that Part's program.", None);
+                } else {
+                    self.set_mode(Mode::Performance);
+                }
+            }
             Some("x_menu") => self.show_fx = !self.show_fx,
             Some("e_trig") => self.show_trig = !self.show_trig,
             Some(a @ ("o_menu" | "f_menu" | "l_menu" | "e_menu")) => {
@@ -2759,6 +2852,7 @@ impl eframe::App for App {
         self.windows(&ctx);
         self.live_tick();
         self.dump_all_tick(&ctx);
+        self.library_tick();
     }
 }
 

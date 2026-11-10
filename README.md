@@ -12,6 +12,12 @@ Written in Rust with egui.
   In Performance mode, edits go to the selected Part on its own MIDI channel. Only the Nova's
   edit buffer changes; press Write on the Nova to store a sound.
 - **Mirror**: moving controls on the Nova updates the editor.
+- **Display like the hardware**: name on top, `Prog A000` / `Perf A000` right-aligned underneath.
+- **Choosing programs**: Bank/Prog up/down and the lower Fast Data knob select programs. In
+  Performance mode, press a Part button and they change that Part's program (the Nova follows on
+  the Part's MIDI channel); press perf again to step through performances.
+- **Library kept between launches**: retrieved or loaded programs and performances are saved
+  automatically and loaded at the next start.
 - **Connects by itself**: remembers your MIDI ports, reconnects at start and when the interface
   is plugged back in, and reads the Nova's global MIDI channel on connect. A lamp shows the
   connection state.

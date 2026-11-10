@@ -45,7 +45,7 @@ fn bank_letter(b: u8) -> &'static str {
 
 impl App {
     /// Type-2 messages for library programs (one bank, or all banks), ordered by bank and index.
-    fn lib_program_msgs(&self, bank: Option<u8>) -> Vec<Vec<u8>> {
+    pub(crate) fn lib_program_msgs(&self, bank: Option<u8>) -> Vec<Vec<u8>> {
         let chan = self.send_chan;
         let mut v: Vec<(u8, u8, Vec<u8>)> = self
             .programs
@@ -60,7 +60,7 @@ impl App {
     }
 
     /// Type-7 messages for stored library performances, each followed by its companion.
-    fn lib_perf_msgs(&self) -> Vec<Vec<u8>> {
+    pub(crate) fn lib_perf_msgs(&self) -> Vec<Vec<u8>> {
         let chan = self.send_chan;
         let mut v: Vec<&sysex::Performance> = self.perfs.iter().filter(|p| p.bundle.is_none() && p.body.len() >= crate::perf::PERF_LEN).collect();
         v.sort_by_key(|p| (p.bank, p.idx));
@@ -119,6 +119,7 @@ impl App {
                 nf += 1;
             }
         }
+        self.lib_dirty = Some(std::time::Instant::now());
         let extra = if skipped > 0 { format!(" ({skipped} part dumps without a bank skipped)") } else { String::new() };
         self.set_status(format!("Merged {np} programs and {nf} performances into the library{extra}"), Some(np + nf > 0));
     }

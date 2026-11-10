@@ -58,3 +58,16 @@ impl FileDialog {
         None
     }
 }
+
+/// The library the app keeps between launches (programs and performances as .syx): in the iPad's
+/// Documents folder, or the settings folder on the Mac.
+pub fn library_path() -> Option<PathBuf> {
+    #[cfg(target_os = "ios")]
+    {
+        documents_dir().map(|d| d.join("nova_library.syx"))
+    }
+    #[cfg(not(target_os = "ios"))]
+    {
+        config_dir().map(|d| d.join("novaedit").join("nova_library.syx"))
+    }
+}

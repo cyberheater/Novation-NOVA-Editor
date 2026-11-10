@@ -215,10 +215,13 @@ pub struct PanelState {
     pub fx_part: Option<usize>,
     drag: Option<(String, f32, i32)>,
     scroll_acc: f32,
+    /// lower Fast Data knob: drag/scroll accumulator and its pointer angle (radians)
+    fast_acc: f32,
+    fast_turn: f32,
 }
 impl Default for PanelState {
     fn default() -> Self {
-        PanelState { osc: 0, tune: "octave", dest: "pitch", fx: "chorus", env: 0, lfo: 0, fdest: "freq", fsrc: "lfo1", msrc: "lfo1", part: None, ppage: "tune", perf_mode: false, fx_part: None, drag: None, scroll_acc: 0.0 }
+        PanelState { osc: 0, tune: "octave", dest: "pitch", fx: "chorus", env: 0, lfo: 0, fdest: "freq", fsrc: "lfo1", msrc: "lfo1", part: None, ppage: "tune", perf_mode: false, fx_part: None, drag: None, scroll_acc: 0.0, fast_acc: 0.0, fast_turn: 0.0 }
     }
 }
 impl PanelState {
@@ -607,10 +610,24 @@ pub fn draw(
     p.rect_stroke(bez, 6.0 * scale, Stroke::new(1.5 * scale, Color32::from_rgb(0x6a, 0x72, 0x8c)), egui::StrokeKind::Inside);
     vgrad(&p, lcd_rect, Color32::from_rgb(0x08, 0x1c, 0x42), Color32::from_rgb(0x03, 0x0b, 0x22));
     p.rect_stroke(lcd_rect, 3.0 * scale, Stroke::new(1.5 * scale, Color32::from_black_alpha(200)), egui::StrokeKind::Inside);
-    let lf = FontId::monospace(33.0 * scale);
+    // 2 x 16 character display: fit the cells to the glass, draw faint unlit cells, then the text
+    let probe = p.layout_no_wrap("M".into(), FontId::monospace(100.0), Color32::WHITE);
+    let (cw100, ch100) = (probe.size().x, probe.size().y);
+    let fs = (lcd_rect.width() * 0.9 / 16.0 / (cw100 / 100.0)).min(lcd_rect.height() * 0.42 / (ch100 / 100.0));
+    let lf = FontId::monospace(fs);
+    let (cw, chh) = (cw100 * fs / 100.0, ch100 * fs / 100.0);
+    let x0 = lcd_rect.center().x - cw * 8.0;
+    let gap = lcd_rect.height() * 0.06;
+    let y0 = lcd_rect.center().y - chh - gap / 2.0;
     let lc = Color32::from_rgb(0x7c, 0xd0, 0xff);
     for (i, txt) in [lcd.0, lcd.1].into_iter().enumerate() {
-        let pos = lcd_rect.min + vec2(10.0, 8.0 + 50.0 * i as f32) * scale;
+        let y = y0 + i as f32 * (chh + gap);
+        for col in 0..16 {
+            let cell = Rect::from_min_size(egui::pos2(x0 + col as f32 * cw + cw * 0.06, y + chh * 0.12), vec2(cw * 0.88, chh * 0.78));
+            p.rect_filled(cell, 1.0, Color32::from_rgba_unmultiplied(70, 130, 255, 16));
+        }
+        let txt: String = format!("{:<16}", txt).chars().take(16).collect();
+        let pos = egui::pos2(x0, y);
         p.text(pos + vec2(0.0, 1.0 * scale), Align2::LEFT_TOP, txt.clone(), lf.clone(), Color32::from_rgba_unmultiplied(80, 170, 255, 60));
         p.text(pos, Align2::LEFT_TOP, txt, lf.clone(), lc);
     }
@@ -659,6 +676,33 @@ pub fn draw(
         let d = 84.0;
         let (c, cap_top, hit) = geom(kn.x, kn.y, d, kn.cap, ui);
         let r = ui.interact(hit, ui.id().with(("kn", kn.id)), Sense::click_and_drag());
+        if kn.id == "fast2" {
+            // lower Fast Data knob: an endless encoder that selects programs, like Prog up/down
+            const NOTCH: f32 = 14.0;
+            if r.dragged() {
+                st.fast_acc -= r.drag_delta().y;
+            }
+            if r.hovered() {
+                st.fast_acc += ui.input(|i| i.smooth_scroll_delta.y);
+            }
+            let mut steps = 0i32;
+            while st.fast_acc >= NOTCH {
+                st.fast_acc -= NOTCH;
+                steps += 1;
+            }
+            while st.fast_acc <= -NOTCH {
+                st.fast_acc += NOTCH;
+                steps -= 1;
+            }
+            if steps != 0 {
+                out.step_prog = Some(steps);
+                st.fast_turn += steps as f32 * 0.35;
+            }
+            r.clone().on_hover_text("Turn (drag up/down or scroll) to select programs; with a Part selected in Perf mode, that Part's program.");
+            let a = st.fast_turn;
+            draw_knob(&p, c, d / 2.0 * scale, scale, false, false, vec2(a.sin(), -a.cos()));
+            continue;
+        }
         let t = target_of(kn.id, st, assign, params);
         if let Some(t) = &t {
             let buf: &mut [u8] = if t.perf { &mut *perf_body } else { &mut *prog };
