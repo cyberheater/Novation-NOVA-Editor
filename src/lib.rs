@@ -150,6 +150,8 @@ pub struct App {
     confirm_fill: bool,
     confirm_set_send: bool,
     confirm_independent: bool,
+    /// Open rename dialog: (performance list?, list index, edited name, focus requested).
+    rename: Option<(bool, usize, String, bool)>,
     independent_target: u8,
     independent_ack: bool,
     set_send_ack: bool,
@@ -310,6 +312,7 @@ impl App {
             confirm_fill: false,
             confirm_set_send: false,
             confirm_independent: false,
+            rename: None,
             independent_target: 0,
             independent_ack: false,
             set_send_ack: false,
@@ -618,6 +621,59 @@ impl App {
     fn make_perf_independent(&mut self) -> bool {
         let t = if self.independent_has_slot() { self.perf_idx } else { self.independent_target };
         self.make_independent_into(t)
+    }
+
+    /// Write `name` into a program or performance body's 16-byte name field (ASCII, space padded).
+    fn set_name(body: &mut [u8], name: &str) {
+        let mut t: Vec<u8> = name.chars().map(|c| if c.is_ascii() && !c.is_control() { c as u8 } else { b' ' }).collect();
+        t.resize(16, b' ');
+        body[..16].copy_from_slice(&t[..16]);
+    }
+
+    /// Open the rename dialog for list entry `i` (a performance in Performance mode, else a program).
+    fn open_rename(&mut self, perf: bool, i: usize) {
+        let name = if perf { self.perfs.get(i).map(|p| p.name()) } else { self.programs.get(i).map(|p| p.name()) };
+        if let Some(n) = name {
+            self.rename = Some((perf, i, n.trim_end().to_string(), true));
+        }
+    }
+
+    /// Rename list entry `i` in the app's library, and in the open item when it is the one shown.
+    fn apply_rename(&mut self, perf: bool, i: usize, name: &str) {
+        if perf {
+            let Some(p) = self.perfs.get_mut(i) else { return };
+            Self::set_name(&mut p.body, name);
+            if self.perf_cur == Some(i) {
+                Self::set_name(&mut self.perf_body, name);
+                Self::set_name(&mut self.perf_orig, name);
+                if let Some(s) = self.perf_stash.as_mut() {
+                    Self::set_name(s, name);
+                }
+            }
+        } else {
+            let Some(p) = self.programs.get_mut(i) else { return };
+            Self::set_name(&mut p.body, name);
+            if self.cur == Some(i) {
+                Self::set_name(&mut self.prog, name);
+                Self::set_name(&mut self.orig, name);
+                if let Some(s) = self.stash.as_mut() {
+                    Self::set_name(s, name);
+                }
+            }
+        }
+        self.lib_dirty = Some(std::time::Instant::now());
+    }
+
+    /// Messages that store list entry `i` in its slot on the Nova (None if it has no stored slot).
+    fn rename_messages(&self, perf: bool, i: usize) -> Option<Vec<Vec<u8>>> {
+        let chan = self.send_chan;
+        if perf {
+            let p = self.perfs.get(i).filter(|p| p.bundle.is_none())?;
+            Some(vec![sysex::build_type7(&p.body, p.bank, p.idx, chan), sysex::build_perf_companion(p.bank, p.idx, chan)])
+        } else {
+            let p = self.programs.get(i)?;
+            Some(vec![sysex::build_type2(&p.body, p.bank?, p.idx, chan)])
+        }
     }
 
     /// Messages for "make independent and send": the six private programs, then the performance and its companion.
@@ -1873,6 +1929,14 @@ impl App {
         if let Some(p) = out.part_selected {
             self.select_part(p);
         }
+        if out.rename {
+            // the display shows the performance until a Part is chosen, then that Part's program
+            let perf_shown = self.is_perf() && self.pstate.part.is_none();
+            match if perf_shown { self.perf_cur } else { self.cur } {
+                Some(i) => self.open_rename(perf_shown, i),
+                None => self.set_status("Nothing to rename: this item is not in the app's list", Some(false)),
+            }
+        }
         if let Some(id) = out.info {
             self.info_id = Some(id);
             self.readout_msg = None;
@@ -2711,6 +2775,83 @@ impl App {
             }
         }
 
+        // rename dialog
+        if let Some((perf, i, mut buf, focus)) = self.rename.take() {
+            let (what, id, can_store) = if perf {
+                match self.perfs.get(i) {
+                    Some(p) if p.bundle.is_some() => ("performance", "(Nova buffer)".to_string(), false),
+                    Some(p) => ("performance", perf::perf_id(p.bank, p.idx), true),
+                    None => ("performance", String::new(), false),
+                }
+            } else {
+                match self.programs.get(i) {
+                    Some(p) => ("program", p.bank.map(|b| perf::prog_id(b, p.idx)).unwrap_or_default(), p.bank.is_some()),
+                    None => ("program", String::new(), false),
+                }
+            };
+            let block_reason: Option<&str> = if !can_store {
+                Some("This entry has no stored slot, so it can only be renamed in the app.")
+            } else if !self.midi.has_output() {
+                Some("No MIDI output to the Nova is connected (MIDI window), so it can only be renamed in the app.")
+            } else if !self.send_enabled {
+                Some("Sending is off: tick 'Enable sending to the Nova' in the MIDI window to store the new name on the Nova.")
+            } else if self.send_job.is_some() {
+                Some("A send is in progress; try storing on the Nova when it has finished.")
+            } else {
+                None
+            };
+            let (mut ok, mut store, mut cancel) = (false, false, false);
+            egui::Window::new(format!("Rename {what} {id}")).collapsible(false).resizable(false).anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0]).show(ctx, |ui| {
+                ui.set_max_width(460.0);
+                let r = ui.add(egui::TextEdit::singleline(&mut buf).char_limit(16).font(egui::TextStyle::Monospace).desired_width(200.0));
+                if focus {
+                    r.request_focus();
+                }
+                if r.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter)) {
+                    ok = true;
+                }
+                ui.weak("Up to 16 characters.");
+                match block_reason {
+                    Some(t) => {
+                        ui.weak(t);
+                    }
+                    None => {
+                        ui.colored_label(Color32::from_rgb(0xf3, 0xa2, 0x4b), format!("\"Rename and store on Nova\" overwrites {what} {id} on the Nova with the app's copy (new name included)."));
+                    }
+                }
+                ui.horizontal(|ui| {
+                    ok |= ui.button("Rename").on_hover_text("Rename in the app only").clicked();
+                    if block_reason.is_none() {
+                        store = ui.button("Rename and store on Nova").clicked();
+                    }
+                    cancel = ui.button("Cancel").clicked() || ui.input(|i| i.key_pressed(egui::Key::Escape));
+                });
+            });
+            if ok || store {
+                let name = buf.trim_end().to_string();
+                self.apply_rename(perf, i, &name);
+                self.set_status(format!("Renamed {what} {id} to \"{name}\" in the app"), Some(true));
+                if store {
+                    match self.rename_messages(perf, i) {
+                        Some(msgs) => {
+                            self.live_on = false;
+                            match self.midi.start_send(msgs, ctx.clone()) {
+                                Ok(job) => {
+                                    self.set_status(format!("Sending {} message(s)...", job.total), None);
+                                    self.send_note = Some(format!("Stored {what} {id} \"{name}\" on the Nova. On the Nova, select another {what} and then this one again to see the new name."));
+                                    self.send_job = Some(job);
+                                }
+                                Err(e) => self.set_status(format!("Renamed in the app; send failed: {e}"), Some(false)),
+                            }
+                        }
+                        None => self.set_status(format!("Renamed in the app; {what} {id} has no slot to store on the Nova"), Some(false)),
+                    }
+                }
+            } else if !cancel {
+                self.rename = Some((perf, i, buf, false));
+            }
+        }
+
         // fill performances confirmation
         if self.confirm_fill {
             let mut go = false;
@@ -2964,6 +3105,7 @@ impl eframe::App for App {
         });
 
         let mut clicked: Option<usize> = None;
+        let mut rename_req: Option<usize> = None;
         let perf_mode = self.is_perf();
         self.seq.set_out(self.midi.out_handle());
         self.seq.tick(&ctx);
@@ -2972,6 +3114,10 @@ impl eframe::App for App {
             ui.horizontal(|ui| {
                 ui.strong(if perf_mode { "Performances" } else { "Programs" });
                 ui.label(if perf_mode { self.perfs.len() } else { self.programs.len() }.to_string());
+                let cur = if perf_mode { self.perf_cur } else { self.cur };
+                if ui.add_enabled(cur.is_some(), egui::Button::new("Rename...").small()).on_hover_text("Rename the selected item (or right-click / long-press any entry)").clicked() {
+                    rename_req = cur;
+                }
                 ui.add(egui::TextEdit::singleline(&mut self.filter).id(egui::Id::new("filter_edit")).hint_text("filter...").desired_width(f32::INFINITY));
             });
             ui.separator();
@@ -3001,6 +3147,12 @@ impl eframe::App for App {
                     if r.clicked() {
                         clicked = Some(i);
                     }
+                    r.context_menu(|ui| {
+                        if ui.button("Rename...").clicked() {
+                            rename_req = Some(i);
+                            ui.close();
+                        }
+                    });
                 }
                 self.scroll_to_sel = false;
             });
@@ -3008,6 +3160,9 @@ impl eframe::App for App {
         }
         if let Some(i) = clicked {
             if perf_mode { self.select_perf(i) } else { self.select(i) }
+        }
+        if let Some(i) = rename_req {
+            self.open_rename(perf_mode, i);
         }
 
         if self.show_seq {
@@ -3105,6 +3260,16 @@ pub extern "C" fn start_nova_editor() {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn set_name_pads_and_truncates() {
+        let mut b = vec![b'x'; 20];
+        super::App::set_name(&mut b, "Bass é");
+        assert_eq!(&b[..16], b"Bass            ");
+        assert_eq!(b[16], b'x');
+        super::App::set_name(&mut b, "ABCDEFGHIJKLMNOPQRS");
+        assert_eq!(&b[..16], b"ABCDEFGHIJKLMNOP");
+    }
+
     use super::*;
     #[test]
     fn compare_keeps_edits() {

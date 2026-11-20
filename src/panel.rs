@@ -472,6 +472,8 @@ pub struct PanelOut {
     pub step_prog: Option<i32>,
     /// text for the readout when a selector button was pressed
     pub select_msg: Option<String>,
+    /// the display was long-pressed / right-clicked: rename what it shows
+    pub rename: bool,
 }
 
 fn dimc(c: Color32, dim: bool) -> Color32 {
@@ -608,6 +610,10 @@ pub fn draw(
     // LCD: bezel, glass, glowing text
     let lcd_rect = rr(PW * 0.373, PH * 0.106, PW * 0.25, PH * 0.136);
     let bez = lcd_rect.expand(7.0 * scale);
+    let lcd_r = ui.interact(bez, ui.id().with("lcd"), Sense::click()).on_hover_text("Long-press or right-click to rename");
+    if lcd_r.secondary_clicked() || lcd_r.long_touched() {
+        out.rename = true;
+    }
     p.rect_filled(bez.translate(vec2(0.0, 2.0 * scale)), 6.0 * scale, Color32::from_black_alpha(120));
     p.rect_filled(bez, 6.0 * scale, Color32::from_rgb(0x2b, 0x2f, 0x3d));
     p.rect_stroke(bez, 6.0 * scale, Stroke::new(1.5 * scale, Color32::from_rgb(0x6a, 0x72, 0x8c)), egui::StrokeKind::Inside);

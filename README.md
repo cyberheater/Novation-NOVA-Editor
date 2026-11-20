@@ -31,6 +31,9 @@ Written in Rust with egui.
   programs in banks C/D, fill A001-A041 from A000, export or send the whole set.
   **Make independent** copies the open performance's six Part programs into its private slots and,
   after a confirmation, sends just that performance and its programs to the Nova.
+- **Rename** programs and performances: right-click the display or a list entry, or use the
+  Rename button above the list. Rename in the app only, or also store the renamed item in its slot
+  on the Nova.
 - **Unlock banks C/D** (the firmware's hidden memory-expansion switch), with a confirmation.
 - **Step sequencer** (the **seq** button): 8 tracks on MIDI channels 1-8, laid out like a
   Launchpad. 32 projects, each with 16 patterns of up to 64 steps (a pattern holds all 8 tracks);
