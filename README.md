@@ -29,6 +29,8 @@ Written in Rust with egui.
   - Save and load `.syx` / `.mid` files, merge files into the library, or reload the factory set.
 - **Performance sets** for multitimbral use: give each of 42 performances (A000-A041) its own six
   programs in banks C/D, fill A001-A041 from A000, export or send the whole set.
+  **Make independent** copies the open performance's six Part programs into its private slots and,
+  after a confirmation, sends just that performance and its programs to the Nova.
 - **Unlock banks C/D** (the firmware's hidden memory-expansion switch), with a confirmation.
 - **Step sequencer** (the **seq** button): 8 tracks on MIDI channels 1-8, laid out like a
   Launchpad. 32 projects, each with 16 patterns of up to 64 steps (a pattern holds all 8 tracks);

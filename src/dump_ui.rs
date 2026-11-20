@@ -232,7 +232,7 @@ impl App {
             let have = !self.saved_slots.is_empty();
             egui::Grid::new("dump_set").num_columns(2).spacing(GAP).show(ui, |ui| {
                 if big(ui, perf, "Make independent").on_hover_text("Copies Parts 1-6 into this performance's private C/D slots (performance mode).").clicked() {
-                    self.make_perf_independent();
+                    self.open_independent();
                 }
                 let can_fill = perf && self.perf_bank == 1 && self.perf_idx == 0;
                 if big(ui, can_fill, "Fill A001-A041").on_hover_text("Open performance A000 first.").clicked() {

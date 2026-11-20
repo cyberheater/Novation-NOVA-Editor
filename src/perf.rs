@@ -82,6 +82,26 @@ pub fn part_off(p: usize) -> usize {
     PART_BASE + PART_LEN * p
 }
 
+/// Set a Part's program pointer (bank + number).
+///
+/// The Nova has 6 Parts but a performance body holds 8 part blocks. In every performance dumped
+/// from the Nova, blocks 6 and 7 carry copies of the program pointer (+0 PROG_NUM / +1 PROG_BANK)
+/// of Parts 5 and 6 (blocks 4 and 5); the Nova reads Part 6's program from block 7. So for part
+/// index 4 or 5 the same two bytes are also written into block `part + 2`.
+pub fn set_part_prog(body: &mut [u8], part: usize, bank: u8, num: u8) {
+    let mut set = |p: usize| {
+        let b = part_off(p);
+        if body.len() > b + rel::PROG_BANK.max(rel::PROG_NUM) {
+            body[b + rel::PROG_BANK] = bank;
+            body[b + rel::PROG_NUM] = num;
+        }
+    };
+    set(part);
+    if part == 4 || part == 5 {
+        set(part + 2);
+    }
+}
+
 pub const NOTES: [&str; 12] = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 /// MIDI note number to name; 24 = C0, 60 = C3, 120 = C8.
@@ -151,6 +171,24 @@ pub fn rel_name(r: usize) -> Option<&'static str> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn set_part_prog_mirrors_parts_5_6() {
+        let mut body = vec![0u8; 372];
+        set_part_prog(&mut body, 0, 5, 7);
+        assert_eq!((body[part_off(0) + rel::PROG_BANK], body[part_off(0) + rel::PROG_NUM]), (5, 7));
+        assert_eq!(body[part_off(2) + rel::PROG_NUM], 0);
+        set_part_prog(&mut body, 4, 6, 9);
+        set_part_prog(&mut body, 5, 7, 11);
+        for (src, dst) in [(4, 6), (5, 7)] {
+            assert_eq!(body[part_off(dst) + rel::PROG_BANK], body[part_off(src) + rel::PROG_BANK]);
+            assert_eq!(body[part_off(dst) + rel::PROG_NUM], body[part_off(src) + rel::PROG_NUM]);
+        }
+        assert_eq!((body[part_off(7) + rel::PROG_BANK], body[part_off(7) + rel::PROG_NUM]), (7, 11));
+        let mut short = vec![0u8; part_off(5) + 2];
+        set_part_prog(&mut short, 5, 7, 11);
+        assert_eq!(short[part_off(5) + rel::PROG_NUM], 11);
+    }
+
     use super::*;
     use crate::sysex;
 

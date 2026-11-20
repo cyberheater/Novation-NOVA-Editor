@@ -149,6 +149,9 @@ pub struct App {
     saved_slots: Vec<(u8, u8)>,
     confirm_fill: bool,
     confirm_set_send: bool,
+    confirm_independent: bool,
+    independent_target: u8,
+    independent_ack: bool,
     set_send_ack: bool,
     send_note: Option<String>,
     scan: Option<std::sync::Arc<midi::Scan>>,
@@ -306,6 +309,9 @@ impl App {
             saved_slots: Vec::new(),
             confirm_fill: false,
             confirm_set_send: false,
+            confirm_independent: false,
+            independent_target: 0,
+            independent_ack: false,
             set_send_ack: false,
             send_note: None,
             scan: None,
@@ -519,39 +525,112 @@ impl App {
         Ok(slots::slot(block, part))
     }
 
-    /// Copy each of the six Parts' programs into this performance's private slots and repoint the Parts.
-    fn make_perf_independent(&mut self) {
+    /// Preselected target for "Make independent": a stored performance with the same name, else A000.
+    /// `stored` lists (idx, name) of the stored A000..A041 performances.
+    fn default_independent_target(name: &str, stored: &[(u8, String)]) -> u8 {
+        let name = name.trim();
+        stored.iter().find(|(i, n)| (*i as usize) < slots::BLOCKS && n.trim() == name).map(|(i, _)| *i).unwrap_or(0)
+    }
+
+    /// Open the "Make performance independent" dialog with a sensible preselected target.
+    fn open_independent(&mut self) {
+        let name = prog_name(&self.edited_perf()).trim().to_string();
+        let stored: Vec<(u8, String)> = self.perfs.iter().filter(|p| p.bank == 1 && p.bundle.is_none()).map(|p| (p.idx, p.name())).collect();
+        self.independent_target = Self::default_independent_target(&name, &stored);
+        self.confirm_independent = true;
+        self.independent_ack = false;
+    }
+
+    /// True when the open performance is a stored A000-A041 one (its own slot is the target).
+    fn independent_has_slot(&self) -> bool {
+        self.perf_slot_key().is_some() && slots::block_for_perf(self.perf_bank, self.perf_idx).is_some()
+    }
+
+    /// Make the open performance independent into `target_idx` (A000..A041): copy each Part's program into that
+    /// block's private slots, repoint the Parts, store the result as the library performance and select it.
+    /// Returns true when all six Parts were done; nothing changes otherwise.
+    fn make_independent_into(&mut self, target_idx: u8) -> bool {
+        if target_idx as usize >= slots::BLOCKS {
+            self.set_status("Cannot make independent: target performance out of range", Some(false));
+            return false;
+        }
         let sel = self.pstate.part;
-        let mut done = 0;
+        let mut body = self.edited_perf();
+        let bundle = self.bundle_stash.as_ref().or(self.perf_bundle.as_ref()).cloned();
+        let mut progs: Vec<Vec<u8>> = Vec::new();
+        let mut skipped: Vec<String> = Vec::new();
         for part in 0..slots::PARTS {
             let b = perf::part_off(part);
-            let (bank, num) = (self.perf_body[b + perf::rel::PROG_BANK], self.perf_body[b + perf::rel::PROG_NUM]);
-            // the selected Part may carry unsaved edits
-            let body = if sel == Some(part) && self.prog != self.orig {
+            let (bank, num) = (body[b + perf::rel::PROG_BANK], body[b + perf::rel::PROG_NUM]);
+            // the selected Part may carry unsaved edits; else the embedded program; else the library
+            let found = if sel == Some(part) && self.prog != self.orig {
                 Some(self.prog.clone())
+            } else if let Some(p) = bundle.as_ref().and_then(|x| x.parts[part].clone()) {
+                Some(p)
             } else {
                 self.find_program(bank, num).map(|i| self.programs[i].body.clone())
             };
-            let Some(body) = body else { continue };
-            let (nb, ni) = match self.private_slot(part) {
-                Ok(x) => x,
-                Err(e) => {
-                    self.set_status(format!("Cannot make independent: {e}"), Some(false));
-                    return;
-                }
-            };
-            self.store_program(nb, ni, body);
-            self.perf_body[b + perf::rel::PROG_BANK] = nb;
-            self.perf_body[b + perf::rel::PROG_NUM] = ni;
-            done += 1;
+            match found {
+                Some(p) => progs.push(p),
+                None => skipped.push(format!("Part {} skipped: program {} is not in the library", part + 1, perf::prog_id(bank, num))),
+            }
         }
+        if !skipped.is_empty() {
+            self.set_status(format!("0 of {} Parts copied; {}.", slots::PARTS, skipped.join("; ")), Some(false));
+            return false;
+        }
+        for (part, p) in progs.into_iter().enumerate() {
+            let (nb, ni) = slots::slot(target_idx as usize, part);
+            self.store_program(nb, ni, p);
+            let b = perf::part_off(part);
+            perf::set_part_prog(&mut body, part, nb, ni);
+        }
+        let i = match self.perfs.iter().position(|p| p.bank == 1 && p.idx == target_idx && p.bundle.is_none()) {
+            Some(i) => {
+                self.perfs[i].body = body;
+                i
+            }
+            None => {
+                self.perfs.push(sysex::Performance { body, bank: 1, idx: target_idx, bundle: None });
+                self.perfs.len() - 1
+            }
+        };
+        self.lib_dirty = Some(std::time::Instant::now());
+        self.select_perf(i);
         if let Some(p) = sel {
             self.select_part(p);
         }
+        let (a, z) = (slots::slot(target_idx as usize, 0), slots::slot(target_idx as usize, slots::PARTS - 1));
         self.set_status(
-            format!("{done} Part programs copied to this performance's private slots in banks C/D. Export .syx saves them with the performance."),
+            format!(
+                "Stored as {}; {} Part programs copied to its private slots {}-{}. Export .syx saves them with the performance.",
+                perf::perf_id(1, target_idx),
+                slots::PARTS,
+                perf::prog_id(a.0, a.1),
+                perf::prog_id(z.0, z.1)
+            ),
             Some(true),
         );
+        true
+    }
+
+    /// Existing stored-performance path: its own slot is the target.
+    fn make_perf_independent(&mut self) -> bool {
+        let t = if self.independent_has_slot() { self.perf_idx } else { self.independent_target };
+        self.make_independent_into(t)
+    }
+
+    /// Messages for "make independent and send": the six private programs, then the performance and its companion.
+    /// None if a private program is missing from `programs`.
+    fn independent_messages(programs: &[sysex::Program], privates: &[(u8, u8)], perf_body: &[u8], perf_bank: u8, perf_idx: u8, chan: u8) -> Option<Vec<Vec<u8>>> {
+        let mut msgs = Vec::new();
+        for &(bank, idx) in privates {
+            let p = programs.iter().find(|p| p.bank == Some(bank) && p.idx == idx)?;
+            msgs.push(sysex::build_type2(&p.body, bank, idx, chan));
+        }
+        msgs.push(sysex::build_type7(perf_body, perf_bank, perf_idx, chan));
+        msgs.push(sysex::build_perf_companion(perf_bank, perf_idx, chan));
+        Some(msgs)
     }
 
     /// Copy performance A000 into A001-A041 (in the app's list) and give each its private C/D block.
@@ -595,8 +674,7 @@ impl App {
                 let (nb, ni) = slots::slot(k, part);
                 self.store_program(nb, ni, pb);
                 let b = perf::part_off(part);
-                body[b + perf::rel::PROG_BANK] = nb;
-                body[b + perf::rel::PROG_NUM] = ni;
+                perf::set_part_prog(&mut body, part, nb, ni);
             }
             match self.perfs.iter().position(|p| p.bank == 1 && p.idx == k as u8 && p.bundle.is_none()) {
                 Some(i) => self.perfs[i].body = body,
@@ -807,8 +885,7 @@ impl App {
         if (nb, nn) == (bank, num) {
             return;
         }
-        self.perf_body[b + perf::rel::PROG_BANK] = nb;
-        self.perf_body[b + perf::rel::PROG_NUM] = nn;
+        perf::set_part_prog(&mut self.perf_body, part, nb, nn);
         let body = self.find_program(nb, nn).map(|i| self.programs[i].body.clone());
         if let (Some(bundle), Some(body)) = (self.perf_bundle.as_mut(), body.clone()) {
             if let Some(slot) = bundle.parts.get_mut(part) {
@@ -1533,8 +1610,7 @@ impl App {
                 if bank != self.perf_body[b + rel::PROG_BANK] || num != self.perf_body[b + rel::PROG_NUM] {
                     reload = true;
                 }
-                self.perf_body[b + rel::PROG_BANK] = bank;
-                self.perf_body[b + rel::PROG_NUM] = num;
+                perf::set_part_prog(&mut self.perf_body, p, bank, num);
                 let pname = self
                     .find_program(bank, num)
                     .map(|i| self.programs[i].name())
@@ -1556,7 +1632,7 @@ impl App {
                         .on_hover_text("Copies the programs of Parts 1-6 into this performance's own private slots in banks C/D and repoints the Parts, so later edits never touch programs other performances use.")
                         .clicked()
                     {
-                        self.make_perf_independent();
+                        self.open_independent();
                     }
                     if self.perf_bank == 1 && self.perf_idx == 0 && ui.button("Fill A001-A041 from this performance...").clicked() {
                         self.confirm_fill = true;
@@ -1591,8 +1667,7 @@ impl App {
                                 if let Ok((bank, idx)) = self.private_slot(p) {
                                     let body = self.prog.clone();
                                     self.store_program(bank, idx, body);
-                                    self.perf_body[b + rel::PROG_BANK] = bank;
-                                    self.perf_body[b + rel::PROG_NUM] = idx;
+                                    perf::set_part_prog(&mut self.perf_body, p, bank, idx);
                                     if let Some(i) = self.find_program(bank, idx) {
                                         self.select(i);
                                     }
@@ -1624,8 +1699,7 @@ impl App {
                         let (bank, idx) = self.new_slot;
                         let body = self.prog.clone();
                         self.store_program(bank, idx, body);
-                        self.perf_body[b + rel::PROG_BANK] = bank;
-                        self.perf_body[b + rel::PROG_NUM] = idx;
+                        perf::set_part_prog(&mut self.perf_body, p, bank, idx);
                         if let Some(i) = self.find_program(bank, idx) {
                             self.select(i);
                         }
@@ -2105,10 +2179,8 @@ impl App {
                     for p in 0..slots::PARTS {
                         let b = perf::part_off(p);
                         if self.perf_body[b + perf::rel::CHAN] == ch {
-                            if let Some(bk) = self.rx_bank[ch as usize].filter(|v| (5..=8).contains(v)) {
-                                self.perf_body[b + perf::rel::PROG_BANK] = bk;
-                            }
-                            self.perf_body[b + perf::rel::PROG_NUM] = m.d1;
+                            let bk = self.rx_bank[ch as usize].filter(|v| (5..=8).contains(v)).unwrap_or(self.perf_body[b + perf::rel::PROG_BANK]);
+                            perf::set_part_prog(&mut self.perf_body, p, bk, m.d1);
                             hit.push(p);
                         }
                     }
@@ -2534,7 +2606,7 @@ impl App {
                 match self.midi.start_send(msgs, ctx.clone()) {
                     Ok(job) => {
                         self.set_status(format!("Sending {} message(s)...", job.total), None);
-                        self.send_note = Some("Sent the performance set to the Nova (stored in A000-A041 and C/D). Check the Nova.".into());
+                        self.send_note = Some("Sent the performance set to the Nova (stored in A000-A041 and C/D). On the Nova, select another performance and then this one again to load the stored version.".into());
                         self.send_job = Some(job);
                     }
                     Err(e) => self.set_status(format!("Send failed: {e}"), Some(false)),
@@ -2543,6 +2615,99 @@ impl App {
             if go || cancel {
                 self.confirm_set_send = false;
                 self.set_send_ack = false;
+            }
+        }
+
+        // make performance independent confirmation
+        if self.confirm_independent {
+            let picker = !self.independent_has_slot();
+            let tgt = if picker { self.independent_target.min(slots::BLOCKS as u8 - 1) } else { self.perf_idx };
+            let slot_range: Result<String, String> = {
+                let (a, z) = (slots::slot(tgt as usize, 0), slots::slot(tgt as usize, slots::PARTS - 1));
+                Ok(format!("{}-{}", perf::prog_id(a.0, a.1), perf::prog_id(z.0, z.1)))
+            };
+            let choices: Vec<String> = (0..slots::BLOCKS as u8)
+                .map(|i| match self.perfs.iter().find(|p| p.bank == 1 && p.idx == i && p.bundle.is_none()) {
+                    Some(p) => format!("{} {}", perf::perf_id(1, i), p.name()),
+                    None => perf::perf_id(1, i),
+                })
+                .collect();
+            let block_reason: Option<&str> = if !self.midi.has_output() {
+                Some("No MIDI output to the Nova is connected (MIDI window)")
+            } else if !self.send_enabled {
+                Some("Sending is off: tick 'Enable sending to the Nova' in the MIDI window")
+            } else if self.send_job.is_some() {
+                Some("A send is already in progress")
+            } else {
+                None
+            };
+            let perf_label = perf::perf_id(if picker { 1 } else { self.perf_bank }, tgt);
+            let mut go = false;
+            let mut only = false;
+            let mut cancel = false;
+            egui::Window::new("Make performance independent").collapsible(false).resizable(false).anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0]).show(ctx, |ui| {
+                ui.set_max_width(480.0);
+                match &slot_range {
+                    Err(e) => {
+                        ui.label(format!("Cannot make this performance independent: {e}"));
+                        cancel = ui.button("Close").clicked();
+                    }
+                    Ok(range) => {
+                        if picker {
+                            ui.label(format!("This performance came from the Nova's edit buffer and has no stored slot. Choose where to store it: its six Part programs go into that slot's private programs ({range}) and it is stored as {perf_label}, in the app and on the Nova."));
+                            egui::ComboBox::from_label("Store as performance").selected_text(choices[tgt as usize].clone()).show_ui(ui, |ui| {
+                                for (i, c) in choices.iter().enumerate() {
+                                    ui.selectable_value(&mut self.independent_target, i as u8, c.clone());
+                                }
+                            });
+                        }
+                        ui.label(format!("The six Part programs are copied into this performance's private slots ({range}) and the Parts are repointed to them. Then those six programs and performance {perf_label} are sent to the Nova and stored."));
+                        ui.colored_label(Color32::from_rgb(0xf3, 0xa2, 0x4b), format!("This overwrites program slots {range} and performance {perf_label} on the Nova. They are stored, not just edit-buffer changes. Your current Nova contents there are lost unless backed up."));
+                        ui.label("Needs Memory protect = Off and Sysex reception = Normal on the Nova (as in your Global pages).");
+                        match block_reason {
+                            Some(r) => {
+                                ui.colored_label(Color32::from_rgb(0xf3, 0xa2, 0x4b), r);
+                                ui.horizontal(|ui| {
+                                    only = ui.button("Make independent only (don't send)").clicked();
+                                    cancel = ui.button("Cancel").clicked();
+                                });
+                            }
+                            None => {
+                                ui.checkbox(&mut self.independent_ack, "I have a current backup and want to overwrite those slots");
+                                ui.horizontal(|ui| {
+                                    go = ui.add_enabled(self.independent_ack, egui::Button::new("Make independent and send")).clicked();
+                                    cancel = ui.button("Cancel").clicked();
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+            if only {
+                self.make_perf_independent();
+            }
+            if go {
+                if self.make_perf_independent() {
+                    let privates: Vec<(u8, u8)> = (0..slots::PARTS).filter_map(|p| self.private_slot(p).ok()).collect();
+                    match Self::independent_messages(&self.programs, &privates, &self.perf_body, self.perf_bank, self.perf_idx, self.send_chan) {
+                        Some(msgs) if privates.len() == slots::PARTS => {
+                            self.live_on = false;
+                            match self.midi.start_send(msgs, ctx.clone()) {
+                                Ok(job) => {
+                                    self.set_status(format!("Sending {} message(s)...", job.total), None);
+                                    self.send_note = Some("Sent this performance and its six private programs to the Nova. On the Nova, select another performance and then this one again: until then it keeps playing its old copy.".into());
+                                    self.send_job = Some(job);
+                                }
+                                Err(e) => self.set_status(format!("Send failed: {e}"), Some(false)),
+                            }
+                        }
+                        _ => self.set_status("Nothing sent: a private program is missing from the library", Some(false)),
+                    }
+                }
+            }
+            if go || only || cancel {
+                self.confirm_independent = false;
+                self.independent_ack = false;
             }
         }
 
@@ -2953,5 +3118,25 @@ mod tests {
         compare_toggle(&mut prog, &orig, &mut stash);
         assert_eq!(prog[0x40], 99);
         assert!(stash.is_none());
+    }
+    #[test]
+    fn independent_target_default() {
+        let stored = vec![(3u8, "Pad".to_string()), (7, " Lead ".to_string())];
+        assert_eq!(App::default_independent_target("Lead", &stored), 7);
+        assert_eq!(App::default_independent_target("Nope", &stored), 0);
+        assert_eq!(App::default_independent_target("Pad", &[]), 0);
+    }
+    #[test]
+    fn independent_messages_order() {
+        let mk = |bank: u8, idx: u8| sysex::Program { body: vec![idx; N], bank: Some(bank), idx, label: String::new() };
+        let privs: Vec<(u8, u8)> = (0..6).map(|i| (6u8, i as u8)).collect();
+        let progs: Vec<sysex::Program> = privs.iter().map(|&(b, i)| mk(b, i)).collect();
+        let body = vec![0u8; 372];
+        let m = App::independent_messages(&progs, &privs, &body, 1, 0, 0).unwrap();
+        assert_eq!(m.len(), 8);
+        assert_eq!(m[0], sysex::build_type2(&progs[0].body, 6, 0, 0));
+        assert_eq!(m[6], sysex::build_type7(&body, 1, 0, 0));
+        assert_eq!(m[7], sysex::build_perf_companion(1, 0, 0));
+        assert!(App::independent_messages(&progs[..5], &privs, &body, 1, 0, 0).is_none());
     }
 }
